@@ -1,0 +1,23 @@
+[
+  {
+    "id": "calculator-add",
+    "repo": "calculator_bug",
+    "issue": "The add(a, b) function returns the wrong result. Fix it without changing its public signature. Run the tests.",
+    "test_command": ["{python}", "-m", "unittest", "discover", "-v"],
+    "check_command": ["{python}", "-m", "unittest", "discover", "-v"]
+  },
+  {
+    "id": "slugify-normalization",
+    "repo": "slugify_bug",
+    "issue": "slugify(title) should return a lowercase slug and collapse runs of spaces into one hyphen. Preserve the public function signature. Run the tests.",
+    "test_command": ["{python}", "-m", "unittest", "discover", "-v"],
+    "check_command": ["{python}", "-m", "unittest", "discover", "-v"]
+  },
+  {
+    "id": "config-value-equals",
+    "repo": "config_bug",
+    "issue": "parse_line must split at the first '=' only, because the value can contain additional '=' characters. Keep its return type and run the tests.",
+    "test_command": ["{python}", "-m", "unittest", "discover", "-v"],
+    "check_command": ["{python}", "-m", "unittest", "discover", "-v"]
+  }
+]
