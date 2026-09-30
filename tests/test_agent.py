@@ -6,7 +6,7 @@ from io import StringIO
 from pathlib import Path
 
 from issue_agent.agent import run_issue
-from issue_agent.cli import _save, main
+from issue_agent.cli import _check_command, _load_tasks, _save, main
 from issue_agent.workspace import Workspace
 
 
@@ -88,6 +88,19 @@ class WorkspaceTests(unittest.TestCase):
             self.assertEqual(main(["analyze", str(output), "--include-demo", "--output", str(summary_path)]), 0)
             self.assertFalse(json.loads(summary_path.read_text(encoding="utf-8"))["valid_for_model_effectiveness"])
             self.assertEqual(main(["check", "--tasks", str(Path(__file__).resolve().parent.parent / "examples" / "tasks.json")]), 0)
+
+    def test_independent_acceptance_rejects_visible_test_overfit(self):
+        tasks_path = Path(__file__).resolve().parent.parent / "examples" / "tasks.json"
+        task = _load_tasks(tasks_path)[0]
+        with Workspace(tasks_path.parent / task["repo"], task["test_command"]) as work:
+            self.assertNotIn("checks/acceptance.py", work.list_files()["files"])
+            work.replace_text("calculator.py", "return a - b", "return 5 if (a, b) == (2, 3) else -1")
+            self.assertEqual(work.run_tests()["exit_code"], 0)
+            self.assertNotEqual(work.run_tests(_check_command(task, tasks_path))["exit_code"], 0)
+        with Workspace(tasks_path.parent / task["repo"], task["test_command"]) as work:
+            work.replace_text("calculator.py", "return a - b", "return a + b")
+            self.assertEqual(work.run_tests()["exit_code"], 0)
+            self.assertEqual(work.run_tests(_check_command(task, tasks_path))["exit_code"], 0)
 
 
 if __name__ == "__main__":

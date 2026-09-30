@@ -19,6 +19,7 @@ class EvaluationTests(unittest.TestCase):
         self.assertEqual(classify_result(passed), "passed")
         self.assertEqual(classify_result(failed), "tests_failed")
         self.assertEqual(classify_result(invalid), "already_passing")
+        self.assertEqual(classify_result({**passed, "check": {"exit_code": 1}}), "check_failed")
         summary = aggregate_results([passed, failed, invalid])
         self.assertEqual(summary["pass_rate"], 0.333)
         self.assertEqual(summary["outcomes"], {"already_passing": 1, "passed": 1, "tests_failed": 1})

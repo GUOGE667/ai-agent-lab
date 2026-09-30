@@ -71,6 +71,13 @@ def _load_tasks(tasks_path: Path) -> list[dict]:
     return tasks
 
 
+def _check_command(task: dict, tasks_path: Path) -> list[str] | None:
+    command = task.get("check_command")
+    if command is None:
+        return None
+    return [part.replace("{tasks_dir}", str(tasks_path.parent)) for part in command]
+
+
 def _scripted_demo(payload: dict, _key: str) -> dict:
     """Deterministic example responses; never connects to a model service."""
     previous = payload.get("previous_response_id")
@@ -133,10 +140,14 @@ def main(argv: list[str] | None = None) -> int:
                 repo = (tasks_path.parent / task["repo"]).resolve(strict=True)
                 with Workspace(repo, task["test_command"]) as workspace:
                     baseline = workspace.run_tests()
+                    command = _check_command(task, tasks_path)
+                    acceptance = workspace.run_tests(command) if command else None
                 valid = baseline["exit_code"] not in (None, 0)
-                rows.append({"id": task["id"], "baseline_fails": valid, "exit_code": baseline["exit_code"]})
+                acceptance_valid = acceptance is None or acceptance["exit_code"] not in (None, 0)
+                rows.append({"id": task["id"], "baseline_fails": valid, "exit_code": baseline["exit_code"],
+                             "acceptance_baseline_fails": acceptance_valid, "check_exit_code": acceptance["exit_code"] if acceptance else None})
             print(json.dumps({"mode": "offline_check", "tasks": rows}, ensure_ascii=False, indent=2))
-            return 0 if all(row["baseline_fails"] for row in rows) else 1
+            return 0 if all(row["baseline_fails"] and row["acceptance_baseline_fails"] for row in rows) else 1
         if args.mode == "analyze":
             rows = []
             skipped = 0
@@ -190,7 +201,7 @@ def main(argv: list[str] | None = None) -> int:
             task_id = task.get("id", str(index))
             try:
                 repo = (tasks_path.parent / task["repo"]).resolve(strict=True)
-                result, check = _run_one(repo, task["issue"], task["test_command"], args.model, key, args.max_steps, task.get("check_command"))
+                result, check = _run_one(repo, task["issue"], task["test_command"], args.model, key, args.max_steps, _check_command(task, tasks_path))
                 task_output = output / f"task-{index:03d}"
                 _save(result, repo, task_output)
                 row = {"id": task_id, "check": check, **result.metadata()}

@@ -6,7 +6,7 @@
 
 - 已实现单 Agent 工具循环、文件路径限制、测试命令超时、运行记录、批量任务评测。
 - 已限制单次任务最多修改 5 个文件、执行 20 次编辑；评测会输出失败类别和工具错误数。
-- 已有离线单元测试和 10 个覆盖不同错误类型的合成 Issue；[任务目录](examples/README.md)列出各任务的验收重点。
+- 已有离线单元测试和 10 个覆盖不同错误类型的合成 Issue；每个任务另有不放入 Agent 临时仓库的独立验收检查。[任务目录](examples/README.md)列出各任务的验收重点。
 - 默认只运行离线演示或检查。真实模型命令必须显式加 `--live`；当前不会调用 API。
 - **尚无真实模型成功率数据。**当前只验证了离线工具链；不要在简历中填写未经实测的通过率。
 - [项目架构与五部分进度](docs/architecture.md)记录已完成工作和后续验收条件。
@@ -61,9 +61,11 @@ python -m issue_agent.cli eval --tasks examples/tasks.json --model gpt-5.1 --liv
   "repo": "relative/path/to/repo",
   "issue": "Clear behavior change with acceptance criteria",
   "test_command": ["{python}", "-m", "unittest", "discover", "-v"],
-  "check_command": ["{python}", "-m", "unittest", "discover", "-v"]
+  "check_command": ["{python}", "{tasks_dir}/checks/acceptance.py", "unique-task-id"]
 }
 ```
+
+`{tasks_dir}` 会在运行独立验收命令前替换为任务清单所在目录。`check` 会分别验证公开测试和独立验收在修复前失败；批量评测只有两组测试都通过才算成功。验收脚本不复制进 Agent 的临时仓库，但它仍存在于公开项目中，不能视为对具有仓库外访问能力的模型保密。
 
 正式评测建议准备至少 30 个来自固定版本仓库的**不同**小 Issue，并为每个任务保留独立验收测试。程序会先运行修复前测试；只有修复前失败、修复后通过的任务才算成功。再固定模型、提示词、任务集和最大步数批量运行。报告任务通过率、各类失败数量、工具错误数、总 token、平均耗时，并逐条分析失败原因。当前合成任务只用于接通流程，不足以支持简历中的效果结论。
 

@@ -4,69 +4,69 @@
     "repo": "calculator_bug",
     "issue": "The add(a, b) function returns the wrong result. Fix it without changing its public signature. Run the tests.",
     "test_command": ["{python}", "-m", "unittest", "discover", "-v"],
-    "check_command": ["{python}", "-m", "unittest", "discover", "-v"]
+    "check_command": ["{python}", "{tasks_dir}/checks/acceptance.py", "calculator-add"]
   },
   {
     "id": "slugify-normalization",
     "repo": "slugify_bug",
     "issue": "slugify(title) should return a lowercase slug and collapse runs of spaces into one hyphen. Preserve the public function signature. Run the tests.",
     "test_command": ["{python}", "-m", "unittest", "discover", "-v"],
-    "check_command": ["{python}", "-m", "unittest", "discover", "-v"]
+    "check_command": ["{python}", "{tasks_dir}/checks/acceptance.py", "slugify-normalization"]
   },
   {
     "id": "config-value-equals",
     "repo": "config_bug",
     "issue": "parse_line must split at the first '=' only, because the value can contain additional '=' characters. Keep its return type and run the tests.",
     "test_command": ["{python}", "-m", "unittest", "discover", "-v"],
-    "check_command": ["{python}", "-m", "unittest", "discover", "-v"]
+    "check_command": ["{python}", "{tasks_dir}/checks/acceptance.py", "config-value-equals"]
   },
   {
     "id": "pagination-one-based",
     "repo": "pagination_bug",
     "issue": "page(items, page_number, page_size) uses one-based page numbers. Return the correct slice for the first, middle, and final partial page. Preserve the signature and run the tests.",
     "test_command": ["{python}", "-m", "unittest", "discover", "-v"],
-    "check_command": ["{python}", "-m", "unittest", "discover", "-v"]
+    "check_command": ["{python}", "{tasks_dir}/checks/acceptance.py", "pagination-one-based"]
   },
   {
     "id": "retry-attempt-budget",
     "repo": "retry_bug",
     "issue": "retry(operation, max_attempts) must call the operation at most max_attempts times, return its first success, and re-raise the last error after all attempts fail. Reject nonpositive max_attempts. Run the tests.",
     "test_command": ["{python}", "-m", "unittest", "discover", "-v"],
-    "check_command": ["{python}", "-m", "unittest", "discover", "-v"]
+    "check_command": ["{python}", "{tasks_dir}/checks/acceptance.py", "retry-attempt-budget"]
   },
   {
     "id": "dedupe-stable-order",
     "repo": "dedupe_bug",
     "issue": "unique_in_order(items) must remove duplicate strings while preserving their first-seen order. Handle empty input and keep the return type. Run the tests.",
     "test_command": ["{python}", "-m", "unittest", "discover", "-v"],
-    "check_command": ["{python}", "-m", "unittest", "discover", "-v"]
+    "check_command": ["{python}", "{tasks_dir}/checks/acceptance.py", "dedupe-stable-order"]
   },
   {
     "id": "median-even-length",
     "repo": "median_bug",
     "issue": "median(values) must return the middle value for odd-length inputs and the arithmetic mean of the two middle values for even-length inputs. Keep empty-input rejection and run the tests.",
     "test_command": ["{python}", "-m", "unittest", "discover", "-v"],
-    "check_command": ["{python}", "-m", "unittest", "discover", "-v"]
+    "check_command": ["{python}", "{tasks_dir}/checks/acceptance.py", "median-even-length"]
   },
   {
     "id": "query-encoding",
     "repo": "query_bug",
     "issue": "build_query(params) must URL-encode both keys and values in insertion order, using application/x-www-form-urlencoded rules (spaces become '+'). Empty input returns an empty string. Run the tests.",
     "test_command": ["{python}", "-m", "unittest", "discover", "-v"],
-    "check_command": ["{python}", "-m", "unittest", "discover", "-v"]
+    "check_command": ["{python}", "{tasks_dir}/checks/acceptance.py", "query-encoding"]
   },
   {
     "id": "inventory-unknown-sku",
     "repo": "inventory_bug",
     "issue": "reserve(stock, request) must return a new stock mapping and leave the input unchanged. Reject unknown SKUs, negative quantities, and quantities above available stock, including unknown SKUs requested with zero quantity. Run the tests.",
     "test_command": ["{python}", "-m", "unittest", "discover", "-v"],
-    "check_command": ["{python}", "-m", "unittest", "discover", "-v"]
+    "check_command": ["{python}", "{tasks_dir}/checks/acceptance.py", "inventory-unknown-sku"]
   },
   {
     "id": "filename-final-extension",
     "repo": "filename_bug",
     "issue": "extension(filename) must return the lowercase final suffix without its dot. A dotfile alone, trailing dot, or name without a dot has no extension. Run the tests.",
     "test_command": ["{python}", "-m", "unittest", "discover", "-v"],
-    "check_command": ["{python}", "-m", "unittest", "discover", "-v"]
+    "check_command": ["{python}", "{tasks_dir}/checks/acceptance.py", "filename-final-extension"]
   }
 ]
