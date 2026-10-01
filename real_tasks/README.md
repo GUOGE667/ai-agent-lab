@@ -1,6 +1,6 @@
-# 真实历史缺陷任务（首批 9 条）
+# 真实历史缺陷任务（11 条）
 
-这 9 条任务来自 [BugsInPy 的 tqdm 项目](https://github.com/soarsmu/BugsInPy/tree/master/projects/tqdm)所记录的历史缺陷，源码来自 [tqdm 上游仓库](https://github.com/tqdm/tqdm)。任务描述和验收测试由本项目编写，**不是**原始 GitHub Issue 文本。每题固定在一个上游 buggy commit，保留运行所需的 Python 包源码和该版本的许可证文件；上游原测试及其他非运行文件没有复制进任务仓库。
+这 11 条任务来自 [BugsInPy 的 tqdm 项目](https://github.com/soarsmu/BugsInPy/tree/master/projects/tqdm)和 [PySnooper 项目](https://github.com/soarsmu/BugsInPy/tree/master/projects/PySnooper)所记录的历史缺陷，源码来自 [tqdm](https://github.com/tqdm/tqdm)及 [PySnooper](https://github.com/cool-RR/PySnooper) 上游仓库。任务描述和验收测试由本项目编写，**不是**原始 GitHub Issue 文本。每题固定在一个上游 buggy commit，保留运行所需的 Python 包源码和该版本的许可证文件；上游原测试及其他非运行文件没有复制进任务仓库。
 
 筛选时使用的 BugsInPy 元数据提交：[`11c5f1e`](https://github.com/soarsmu/BugsInPy/commit/11c5f1eea954a42132cfd06bf257766a7963e0fd)。每条任务的完整提交 SHA 也写在 [`tasks.json`](tasks.json) 中。
 
@@ -15,8 +15,10 @@
 | `tqdm-7-option-boundary` | bug 7 | [`caefe02`](https://github.com/tqdm/tqdm/commit/caefe02fd6f3165e5634460ab20caf4c60400120) | [`4efd352`](https://github.com/tqdm/tqdm/commit/4efd35246c924236f34d8130b1055a3c3ba78605) | 文本内部的 `--` 被误识别为命令行选项 |
 | `tqdm-8-custom-bar-format` | bug 8 | [`08b8ad1`](https://github.com/tqdm/tqdm/commit/08b8ad1ff3bd003ef8309faaa0cc108ffa40317d) | [`cae9d13`](https://github.com/tqdm/tqdm/commit/cae9d139c6df5614be3bf6e25ccbd600ee3286dc) | 带 `{bar}` 的自定义格式被忽略 |
 | `tqdm-9-si-boundary` | bug 9 | [`9da1d5d`](https://github.com/tqdm/tqdm/commit/9da1d5d116aec7a23d8f6dc22d5e23ecb1c40a7c) | [`d877c1d`](https://github.com/tqdm/tqdm/commit/d877c1dfb4739852105f7b967a8fceb869ac5042) | 接近 SI 单位边界时取整显示错误 |
+| `pysnooper-1-unicode-log` | bug 1 | [`e21a311`](https://github.com/cool-RR/PySnooper/commit/e21a31162f4c54be693d8ca8260e42393b39abd3) | [`56f22f8`](https://github.com/cool-RR/PySnooper/commit/56f22f8ffe1c6b2be4d2cf3ad1987fdb66113da2) | 中文源码行丢失且日志无法按 UTF-8 读取 |
+| `pysnooper-2-custom-repr` | bug 2 | [`e21a311`](https://github.com/cool-RR/PySnooper/commit/e21a31162f4c54be693d8ca8260e42393b39abd3) | [`814abc3`](https://github.com/cool-RR/PySnooper/commit/814abc34a098c1b98cb327105ac396f985d2413e) | `custom_repr` 参数无法设置变量及返回值的显示方式 |
 
-本批对 BugsInPy 的 tqdm bug 1–9 全部筛选并纳入；没有以环境问题替代行为断言的任务。
+本批对 BugsInPy 的 tqdm bug 1–9 全部筛选并纳入，也纳入 PySnooper bug 1–2。PySnooper bug 3 的旧版源码依赖 `future` 包，在当前无额外依赖的 Python 3.12 环境无法导入，因此未纳入。PySnooper bug 1–2 的公开测试和独立验收在导入源码前，为 Python 3.12 补回旧版所需的 `collections.Mapping` 和 `collections.Sequence` 别名；这仅是测试环境适配，任务源码保持上游原样，断言仍针对历史缺陷行为。
 
 ## 离线复现
 
@@ -27,7 +29,7 @@ python -m issue_agent.cli check --tasks real_tasks/tasks.json
 python -m issue_agent.cli verify --tasks real_tasks/tasks.json --fixes real_tasks/checks/reference_fixes.json
 ```
 
-`check` 确认每题的公开测试和独立验收在旧版源码上失败。`verify` 在临时副本中应用参考修复，再确认两组测试通过，不会改动题目源码。独立验收和参考修复都在任务仓库之外，Agent 的文件工具读不到它们。我们还在对应上游 fixed commit 上运行了相同的测试，9 题均通过。
+`check` 确认每题的公开测试和独立验收在旧版源码上失败。`verify` 在临时副本中应用参考修复，再确认两组测试通过，不会改动题目源码。独立验收和参考修复都在任务仓库之外，Agent 的文件工具读不到它们。我们还在对应上游 fixed commit 上运行了相同的测试，11 题均通过。
 
 上述复现使用 Python 3.12.14；更换解释器版本时请重新运行两条离线验证命令。
 

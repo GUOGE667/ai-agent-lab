@@ -3,7 +3,10 @@
 from __future__ import annotations
 
 import io
+import collections
+import collections.abc
 import sys
+import tempfile
 import unittest
 from pathlib import Path
 
@@ -107,6 +110,46 @@ class SiBoundaryAcceptance(unittest.TestCase):
         self.assertEqual(format_sizeof(99.99), "100")
 
 
+class UnicodeTraceAcceptance(unittest.TestCase):
+    def test_non_ascii_source_and_log(self):
+        # Python 3.12 compatibility for this historical version; not a task fix.
+        collections.Mapping = collections.abc.Mapping
+        collections.Sequence = collections.abc.Sequence
+        import pysnooper
+
+        with tempfile.TemporaryDirectory() as directory:
+            log = Path(directory) / "trace.log"
+
+            @pysnooper.snoop(log)
+            def traced():
+                greeting = "你好，世界"
+                return greeting
+
+            self.assertEqual(traced(), "你好，世界")
+            output = log.read_text(encoding="utf-8")
+            self.assertIn('greeting = "你好，世界"', output)
+            self.assertIn("Return value:.. '你好，世界'", output)
+
+
+class CustomRepresentationAcceptance(unittest.TestCase):
+    def test_predicate_rule_applies_to_return_value(self):
+        collections.Mapping = collections.abc.Mapping
+        collections.Sequence = collections.abc.Sequence
+        import pysnooper
+
+        output = io.StringIO()
+
+        @pysnooper.snoop(output, custom_repr=((lambda value: isinstance(value, dict),
+                                                lambda value: f"keys={len(value)}"),))
+        def traced():
+            result = {"a": 1, "b": 2}
+            return result
+
+        self.assertEqual(traced(), {"a": 1, "b": 2})
+        self.assertIn("result = keys=2", output.getvalue())
+        self.assertIn("Return value:.. keys=2", output.getvalue())
+
+
 CASES = {
     "tqdm-1-enumerate-start": EnumerateStartAcceptance,
     "tqdm-2-ansi-trim": AnsiTrimAcceptance,
@@ -117,6 +160,8 @@ CASES = {
     "tqdm-7-option-boundary": OptionBoundaryAcceptance,
     "tqdm-8-custom-bar-format": CustomBarFormatAcceptance,
     "tqdm-9-si-boundary": SiBoundaryAcceptance,
+    "pysnooper-1-unicode-log": UnicodeTraceAcceptance,
+    "pysnooper-2-custom-repr": CustomRepresentationAcceptance,
 }
 
 

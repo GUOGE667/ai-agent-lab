@@ -115,5 +115,31 @@
       "buggy_commit": "9da1d5d116aec7a23d8f6dc22d5e23ecb1c40a7c",
       "fixed_commit": "d877c1dfb4739852105f7b967a8fceb869ac5042"
     }
+  },
+  {
+    "id": "pysnooper-1-unicode-log",
+    "repo": "pysnooper_1/repo",
+    "issue": "PySnooper must preserve non-ASCII source lines in its trace and write a log file that can be read as UTF-8. A traced function containing Chinese text should show that text in the source line and return value. Run the tests.",
+    "test_command": ["{python}", "-m", "unittest", "-v", "test_issue"],
+    "check_command": ["{python}", "{tasks_dir}/checks/acceptance.py", "pysnooper-1-unicode-log"],
+    "source": {
+      "project": "cool-RR/PySnooper",
+      "dataset": "BugsInPy PySnooper bug 1",
+      "buggy_commit": "e21a31162f4c54be693d8ca8260e42393b39abd3",
+      "fixed_commit": "56f22f8ffe1c6b2be4d2cf3ad1987fdb66113da2"
+    }
+  },
+  {
+    "id": "pysnooper-2-custom-repr",
+    "repo": "pysnooper_2/repo",
+    "issue": "Allow PySnooper's snoop decorator to accept custom_repr rules. A single (type, formatter) pair or a sequence of (predicate, formatter) pairs should change how matching local variables and return values are displayed. Keep default repr behavior for unmatched values. Run the tests.",
+    "test_command": ["{python}", "-m", "unittest", "-v", "test_issue"],
+    "check_command": ["{python}", "{tasks_dir}/checks/acceptance.py", "pysnooper-2-custom-repr"],
+    "source": {
+      "project": "cool-RR/PySnooper",
+      "dataset": "BugsInPy PySnooper bug 2",
+      "buggy_commit": "e21a31162f4c54be693d8ca8260e42393b39abd3",
+      "fixed_commit": "814abc34a098c1b98cb327105ac396f985d2413e"
+    }
   }
 ]

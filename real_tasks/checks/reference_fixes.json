@@ -59,5 +59,19 @@
     {"path": "tqdm/_tqdm.py", "old": "if abs(num) < 1000.0:", "new": "if abs(num) < 999.95:"},
     {"path": "tqdm/_tqdm.py", "old": "if abs(num) < 100.0:", "new": "if abs(num) < 99.95:"},
     {"path": "tqdm/_tqdm.py", "old": "if abs(num) < 10.0:", "new": "if abs(num) < 9.995:"}
+  ],
+  "pysnooper-1-unicode-log": [
+    {"path": "pysnooper/tracer.py", "old": "encoding = 'ascii'", "new": "encoding = 'utf-8'"},
+    {"path": "pysnooper/tracer.py", "old": "with open(self.path, 'w' if self.overwrite else 'a') as output_file:", "new": "with open(self.path, 'w' if self.overwrite else 'a', encoding='utf-8') as output_file:"}
+  ],
+  "pysnooper-2-custom-repr": [
+    {"path": "pysnooper/tracer.py", "old": "def get_local_reprs(frame, watch=()):", "new": "def get_local_reprs(frame, watch=(), custom_repr=()):"},
+    {"path": "pysnooper/tracer.py", "old": "utils.get_shortish_repr(value)) for key, value", "new": "utils.get_shortish_repr(value, custom_repr=custom_repr)) for key, value"},
+    {"path": "pysnooper/tracer.py", "old": "            thread_info=False,\n    ):", "new": "            thread_info=False,\n            custom_repr=(),\n    ):"},
+    {"path": "pysnooper/tracer.py", "old": "        self.thread_local = threading.local()", "new": "        self.thread_local = threading.local()\n        if len(custom_repr) == 2 and not all(isinstance(x, (tuple, list)) for x in custom_repr):\n            custom_repr = (custom_repr,)\n        self.custom_repr = custom_repr"},
+    {"path": "pysnooper/tracer.py", "old": "get_local_reprs(frame, watch=self.watch)", "new": "get_local_reprs(frame, watch=self.watch, custom_repr=self.custom_repr)"},
+    {"path": "pysnooper/tracer.py", "old": "utils.get_shortish_repr(arg)", "new": "utils.get_shortish_repr(arg, custom_repr=self.custom_repr)"},
+    {"path": "pysnooper/utils.py", "old": "def get_shortish_repr(item):", "new": "def get_repr_function(item, custom_repr):\n    for condition, action in custom_repr:\n        if isinstance(condition, type):\n            condition = lambda value, expected=condition: isinstance(value, expected)\n        if condition(item):\n            return action\n    return repr\n\n\ndef get_shortish_repr(item, custom_repr=()):"},
+    {"path": "pysnooper/utils.py", "old": "        r = repr(item)", "new": "        r = get_repr_function(item, custom_repr)(item)"}
   ]
 }
