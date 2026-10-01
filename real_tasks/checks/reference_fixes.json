@@ -73,5 +73,14 @@
     {"path": "pysnooper/tracer.py", "old": "utils.get_shortish_repr(arg)", "new": "utils.get_shortish_repr(arg, custom_repr=self.custom_repr)"},
     {"path": "pysnooper/utils.py", "old": "def get_shortish_repr(item):", "new": "def get_repr_function(item, custom_repr):\n    for condition, action in custom_repr:\n        if isinstance(condition, type):\n            condition = lambda value, expected=condition: isinstance(value, expected)\n        if condition(item):\n            return action\n    return repr\n\n\ndef get_shortish_repr(item, custom_repr=()):"},
     {"path": "pysnooper/utils.py", "old": "        r = repr(item)", "new": "        r = get_repr_function(item, custom_repr)(item)"}
+  ],
+  "tornado-5-backward-clock": [
+    {"path": "tornado/ioloop.py", "old": "    def _update_next(self, current_time):\n        if self._next_timeout <= current_time:\n            callback_time_sec = self.callback_time / 1000.0\n            self._next_timeout += (math.floor((current_time - self._next_timeout) /\n                                              callback_time_sec) + 1) * callback_time_sec", "new": "    def _update_next(self, current_time):\n        callback_time_sec = self.callback_time / 1000.0\n        if self._next_timeout <= current_time:\n            self._next_timeout += (math.floor((current_time - self._next_timeout) /\n                                              callback_time_sec) + 1) * callback_time_sec\n        else:\n            self._next_timeout += callback_time_sec"}
+  ],
+  "tornado-9-none-url-args": [
+    {"path": "tornado/httputil.py", "old": "    parsed_url = urlparse(url)", "new": "    if args is None:\n        return url\n    parsed_url = urlparse(url)"}
+  ],
+  "tornado-14-force-current": [
+    {"path": "tornado/ioloop.py", "old": "        elif make_current:\n            if IOLoop.current(instance=False) is None:", "new": "        elif make_current:\n            if IOLoop.current(instance=False) is not None:"}
   ]
 }

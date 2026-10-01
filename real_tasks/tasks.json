@@ -141,5 +141,44 @@
       "buggy_commit": "e21a31162f4c54be693d8ca8260e42393b39abd3",
       "fixed_commit": "814abc34a098c1b98cb327105ac396f985d2413e"
     }
+  },
+  {
+    "id": "tornado-5-backward-clock",
+    "repo": "tornado_5/repo",
+    "issue": "PeriodicCallback must advance its next timeout by one interval when the clock moves slightly backwards. With an existing next timeout of 10.0 seconds, a one-second interval, and a current time of 9.5 seconds, the following timeout must be 11.0. Run the tests.",
+    "test_command": ["{python}", "-m", "unittest", "-v", "test_issue"],
+    "check_command": ["{python}", "{tasks_dir}/checks/acceptance.py", "tornado-5-backward-clock"],
+    "source": {
+      "project": "tornadoweb/tornado",
+      "dataset": "BugsInPy tornado bug 5",
+      "buggy_commit": "2d4053daa56c609d642b214399e046671d4a593e",
+      "fixed_commit": "886643965b5cb782503d8d7b374b7a794ec2077b"
+    }
+  },
+  {
+    "id": "tornado-9-none-url-args",
+    "repo": "tornado_9/repo",
+    "issue": "tornado.httputil.url_concat should accept None for args and return the original URL unchanged, including an existing query and fragment. Keep normal behavior for dictionaries and pairs. Run the tests.",
+    "test_command": ["{python}", "-m", "unittest", "-v", "test_issue"],
+    "check_command": ["{python}", "{tasks_dir}/checks/acceptance.py", "tornado-9-none-url-args"],
+    "source": {
+      "project": "tornadoweb/tornado",
+      "dataset": "BugsInPy tornado bug 9",
+      "buggy_commit": "c9d2a3fa573987629ad576e991c2f3b65f4daab4",
+      "fixed_commit": "86cc31f52992fb9d11f92de6fd5496842fea2265"
+    }
+  },
+  {
+    "id": "tornado-14-force-current",
+    "repo": "tornado_14/repo",
+    "issue": "IOLoop(make_current=True) should create and set the current loop when none exists, and raise RuntimeError without replacing the current loop when one already exists. Run the tests.",
+    "test_command": ["{python}", "-m", "unittest", "-v", "test_issue"],
+    "check_command": ["{python}", "{tasks_dir}/checks/acceptance.py", "tornado-14-force-current"],
+    "source": {
+      "project": "tornadoweb/tornado",
+      "dataset": "BugsInPy tornado bug 14",
+      "buggy_commit": "81ee310adcd905fbdf7c98d9fb6ef0c5a46026c2",
+      "fixed_commit": "1d02ed606f1c52636462633d009bdcbaac644331"
+    }
   }
 ]

@@ -150,6 +150,41 @@ class CustomRepresentationAcceptance(unittest.TestCase):
         self.assertIn("Return value:.. keys=2", output.getvalue())
 
 
+class PeriodicCallbackAcceptance(unittest.TestCase):
+    def test_small_backward_adjustment_advances_one_interval(self):
+        from tornado.ioloop import PeriodicCallback
+
+        callback = PeriodicCallback(lambda: None, 250)
+        callback._next_timeout = 8.0
+        callback._update_next(7.9)
+        self.assertAlmostEqual(callback._next_timeout, 8.25)
+
+
+class UrlConcatAcceptance(unittest.TestCase):
+    def test_none_preserves_encoded_url(self):
+        collections.MutableMapping = collections.abc.MutableMapping
+        from tornado.httputil import url_concat
+
+        url = "https://example.test/a%20b?q=%2B#section"
+        self.assertEqual(url_concat(url, None), url)
+
+
+class ForceCurrentAcceptance(unittest.TestCase):
+    def test_existing_current_loop_is_not_replaced(self):
+        from tornado.ioloop import IOLoop
+
+        first = IOLoop(make_current=False)
+        first.make_current()
+        try:
+            with self.assertRaisesRegex(RuntimeError, "current IOLoop already exists"):
+                second = IOLoop(make_current=True)
+                second.close()
+            self.assertIs(IOLoop.current(instance=False), first)
+        finally:
+            first.close()
+            IOLoop.clear_current()
+
+
 CASES = {
     "tqdm-1-enumerate-start": EnumerateStartAcceptance,
     "tqdm-2-ansi-trim": AnsiTrimAcceptance,
@@ -162,6 +197,9 @@ CASES = {
     "tqdm-9-si-boundary": SiBoundaryAcceptance,
     "pysnooper-1-unicode-log": UnicodeTraceAcceptance,
     "pysnooper-2-custom-repr": CustomRepresentationAcceptance,
+    "tornado-5-backward-clock": PeriodicCallbackAcceptance,
+    "tornado-9-none-url-args": UrlConcatAcceptance,
+    "tornado-14-force-current": ForceCurrentAcceptance,
 }
 
 
