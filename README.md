@@ -14,9 +14,9 @@
 
 ## 先用页面看懂项目
 
-双击打开 [离线项目导览](docs/demo.html)，选择真实缺陷，即可查看任务要求、参考代码修改和修复前后的离线测试状态。页面不连接 API，也不产生费用。这里的参考修复由任务数据提供，**不代表 Agent 已经自主修复这些题目**。
+双击打开 [离线项目导览](docs/demo.html)，选择真实缺陷，即可查看任务要求、参考代码修改和修复前后的离线测试状态。页面的“执行轨迹”还展示一次脚本化 `demo` 实际保存的工具调用、测试反馈和补丁。页面不连接 API，也不产生费用。这里的参考修复和脚本化演示**不代表 Agent 已经自主修复这些题目**。
 
-任务清单有更新时，运行 `python docs/build_demo.py` 重新生成页面；`python docs/build_demo.py --check` 可检查页面是否与任务数据一致。
+任务清单有更新时，运行 `python docs/build_demo.py` 重新生成页面；`python docs/build_demo.py --check` 可检查页面是否与任务数据一致。若需刷新脚本化演示轨迹，先运行 `python docs/capture_demo.py`，再运行 `python docs/build_demo.py`；这两条命令也完全离线。
 
 ## 运行
 

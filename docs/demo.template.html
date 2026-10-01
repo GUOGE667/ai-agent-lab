@@ -13,18 +13,22 @@
     @media(max-width:430px){.pipeline{grid-template-columns:1fr}.step{min-height:0}.result{grid-template-columns:1fr}}
     @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
   </style>
+  <style>
+    .trace-intro{background:#173b3c;color:#edf8f4;border-radius:20px;padding:24px 28px;margin-bottom:18px;display:flex;align-items:center;justify-content:space-between;gap:20px}.trace-intro strong{display:block;font-size:18px}.trace-intro p{color:#cee4de;margin:6px 0 0;font-size:14px}.trace-badge{white-space:nowrap;background:#2d605b;border:1px solid #6a9990;color:#dbfff2;padding:7px 12px;border-radius:100px;font-size:12px;font-weight:800}.trace-grid{display:grid;grid-template-columns:310px minmax(0,1fr);gap:14px;margin-bottom:16px}.trace-nav,.trace-panel,.trace-summary,.patch-panel{background:var(--card);border:1px solid var(--line);border-radius:17px;padding:20px}.trace-nav h3,.trace-panel h3,.trace-summary h3,.patch-panel h3{margin:0 0 8px;font-size:18px}.trace-nav>p,.trace-summary p{color:var(--muted);font-size:13px;margin:0 0 15px}.trace-step{display:block;width:100%;text-align:left;border:1px solid var(--line);border-radius:11px;padding:11px 13px;background:white;color:var(--ink);margin:8px 0;font-weight:750}.trace-step[aria-pressed=true]{border-color:#79bea9;background:#e8f6ed;color:var(--teal-dark)}.trace-step small{display:block;font-weight:500;color:var(--muted);margin-top:2px}.trace-panel{min-width:0}.trace-panel .tool-name{color:var(--teal-dark);font:700 13px/1.5 Consolas,"Courier New",monospace}.trace-panel p{font-size:14px;color:#41545e}.trace-code{background:#1b2d37;color:#ecf8f2;padding:15px;border-radius:11px;white-space:pre-wrap;overflow-wrap:anywhere;font:12px/1.55 Consolas,"Courier New",monospace;overflow:auto;max-height:250px}.trace-label{font-size:12px;font-weight:800;color:#61717a;margin:15px 0 6px}.trace-bottom{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:70px}.trace-summary .test-pair{display:grid;grid-template-columns:1fr 1fr;gap:10px}.test-box{border-radius:11px;padding:12px;min-width:0}.test-box.before{background:#fff1e4}.test-box.after{background:#e8f6ed}.test-box strong{font-size:12px}.test-box pre{font:11px/1.55 Consolas,"Courier New",monospace;white-space:pre-wrap;overflow-wrap:anywhere;margin:6px 0 0}.patch-panel pre{margin:12px 0 0}.trace-note{font-size:12px;color:var(--muted);margin:8px 0 0}@media(max-width:850px){.trace-grid,.trace-bottom{grid-template-columns:1fr}.trace-nav{display:flex;gap:8px;flex-wrap:wrap}.trace-nav h3,.trace-nav>p{width:100%}.trace-step{width:auto;flex:1;min-width:150px;margin:0}}@media(max-width:550px){.trace-intro{display:block;padding:20px}.trace-badge{display:inline-block;margin-top:15px}.trace-summary .test-pair{grid-template-columns:1fr}}
+  </style>
 </head>
 <body>
   <div class="wrap">
     <nav class="topbar" aria-label="页面导航"><div class="brand">AI Agent Lab <span aria-hidden="true">/</span> 项目导览</div><a class="toplink" href="../README.md">阅读项目说明 ↗</a></nav>
     <main>
       <header class="hero">
-        <div><div class="eyebrow">Portfolio project · offline walkthrough</div><h1>给 Agent 一个 Issue，<br><span>看它如何修代码。</span></h1><p class="lead">这个项目搭建了一个 Coding Agent 实验环境。你可以先用下面的真实历史缺陷，直观看清题目、参考修复和测试规则。</p><div class="hero-actions"><a class="button primary" href="#explorer">浏览 20 个真实缺陷 ↓</a><a class="button secondary" href="#flow">先看工作流程</a></div></div>
+        <div><div class="eyebrow">Portfolio project · offline walkthrough</div><h1>给 Agent 一个 Issue，<br><span>看它如何修代码。</span></h1><p class="lead">这个项目搭建了一个 Coding Agent 实验环境。你可以先用下面的真实历史缺陷，直观看清题目、参考修复和测试规则。</p><div class="hero-actions"><a class="button primary" href="#explorer">浏览 20 个真实缺陷 ↓</a><a class="button secondary" href="#trace">查看执行轨迹</a></div></div>
         <aside class="status-card"><div class="status-label">当前实验状态</div><strong>离线任务集已验证<br>真实模型尚未评测</strong><p>页面展示的是预先整理的参考修复，以及本地测试的修复前后结果。没有调用付费 API，也没有可报告的 Agent 成功率。</p></aside>
       </header>
       <section class="metrics" aria-label="项目概况"><div class="metric"><strong id="real-count">20</strong><span>真实历史缺陷</span></div><div class="metric"><strong id="synthetic-count">10</strong><span>合成练习任务</span></div><div class="metric"><strong id="project-count">4</strong><span>上游开源项目</span></div><div class="metric"><strong>0</strong><span>付费模型运行次数</span></div></section>
       <section id="flow" aria-labelledby="flow-title"><div class="section-head"><div><div class="kicker">01 · 工作流程</div><h2 id="flow-title">从 Issue 到可审阅的补丁</h2></div><p class="section-note">这是 Agent 已实现的工具流程；下方任务浏览器展示的是离线参考案例，不是模型执行回放。</p></div><div class="pipeline"><div class="step"><span class="num">01</span><h3>接收 Issue</h3><p>读取固定版本的仓库和明确的行为要求。</p></div><div class="step"><span class="num">02</span><h3>创建临时副本</h3><p>在隔离的工作目录里操作，保留原始任务文件。</p></div><div class="step"><span class="num">03</span><h3>查找并编辑</h3><p>使用受限的文件工具定位代码并做文本修改。</p></div><div class="step"><span class="num">04</span><h3>运行两组测试</h3><p>公开测试与独立验收都通过，才算任务成功。</p></div><div class="step"><span class="num">05</span><h3>保存结果</h3><p>输出补丁、执行轨迹和报告，供人检查。</p></div></div></section>
       <section id="explorer" aria-labelledby="explorer-title"><div class="section-head"><div><div class="kicker">02 · 任务浏览器</div><h2 id="explorer-title">点开一个真实缺陷</h2></div><p class="section-note">看原始要求、关键代码变化和离线测试状态。参考修复来自历史修复数据，不能算作 Agent 自主完成。</p></div><div class="explorer"><aside class="sidebar"><div class="side-top"><h3>选择题目</h3><p id="task-count">共 20 个任务</p><label for="task-search" class="sr-only">搜索任务</label><input class="search" id="task-search" type="search" placeholder="搜索项目、标题或编号" autocomplete="off"><div class="filters" id="filters" aria-label="按项目筛选"></div></div><div class="task-list" id="task-list" aria-label="任务列表"></div></aside><article class="detail" id="task-detail" aria-live="polite"></article></div></section>
+      <section id="trace" aria-labelledby="trace-title"><div class="section-head"><div><div class="kicker">03 · 执行轨迹</div><h2 id="trace-title">一步一步看工具怎么工作</h2></div><p class="section-note">来自仓库 `python -m issue_agent.cli demo` 的一次离线运行。点击步骤查看实际工具参数和返回值。</p></div><div class="trace-intro"><div><strong>计算器加法错误 · 预设脚本演示</strong><p id="demo-issue"></p></div><span class="trace-badge">0 API 调用 · 0 token</span></div><div class="trace-grid"><nav class="trace-nav" id="trace-nav" aria-label="工具调用步骤"><h3>工具调用</h3><p>脚本预设了调用顺序，用来检查工具链和展示输出格式。</p></nav><article class="trace-panel" id="trace-panel" aria-live="polite"></article></div><div class="trace-bottom"><div class="trace-summary"><h3>测试反馈</h3><p>修复前的测试失败；脚本修改后重新运行并通过。这里只显示测试日志的关键行。</p><div class="test-pair"><div class="test-box before"><strong>修复前 · exit code <span id="baseline-code"></span></strong><pre id="baseline-output"></pre></div><div class="test-box after"><strong>修复后 · exit code <span id="final-code"></span></strong><pre id="final-output"></pre></div></div></div><div class="patch-panel"><h3>最终补丁</h3><p class="trace-note">由此次离线演示保存的 `changes.diff`，仅修改临时副本。</p><pre class="trace-code" id="demo-patch"></pre></div></div><p class="caution">这段轨迹由预设工具响应驱动，不是模型自主定位、决策或修复的证据；不能用于计算 Agent 成功率。</p></section>
     </main><footer class="footer"><p>AI Agent Lab · 本页是纯静态文件，可离线打开。数据来自仓库任务清单；真实模型评测需用户日后明确启用。</p></footer>
   </div>
   <script>
@@ -61,8 +65,28 @@
       addText(root, 'p', '以上是任务集的基线与参考答案验证。真实 Agent 尚未运行，任务通过率仍未知。', 'caution');
       const source = addText(root, 'p', '', 'source'); source.append(document.createTextNode('上游修复提交：')); const link = addText(source, 'a', task.fixed_commit.slice(0, 12) + ' ↗'); link.href = `https://github.com/${task.project}/commit/${task.fixed_commit}`; link.target = '_blank'; link.rel = 'noopener noreferrer'; source.append(document.createTextNode(`  ·  缺陷提交 ${task.buggy_commit.slice(0, 12)}`));
     }
+    const toolLabels = {read_file:'读取源文件',replace_text:'精确替换代码',run_tests:'运行预设测试'};
+    const toolDescriptions = {read_file:'先读取 calculator.py，确认 add 函数当前返回减法结果。',replace_text:'脚本指定旧文本和新文本，工具只在临时仓库里替换这一处。',run_tests:'修改后运行项目预设的 unittest 命令，并返回退出码与测试摘要。'};
+    let selectedStep = 0;
+    function renderTraceNav() {
+      const nav = $('trace-nav');
+      for (const old of nav.querySelectorAll('button')) old.remove();
+      DATA.demo_trace.steps.forEach((step, index) => { const button = addText(nav, 'button', `${step.step}. ${toolLabels[step.tool]}`, 'trace-step'); button.type = 'button'; button.setAttribute('aria-pressed', String(index === selectedStep)); addText(button, 'small', step.tool); button.addEventListener('click', () => { selectedStep = index; renderTraceNav(); renderTracePanel(); }); });
+    }
+    function renderTracePanel() {
+      const step = DATA.demo_trace.steps[selectedStep]; const panel = $('trace-panel'); panel.replaceChildren();
+      addText(panel, 'div', `STEP ${step.step} / ${DATA.demo_trace.steps.length}`, 'task-number'); addText(panel, 'h3', toolLabels[step.tool]); addText(panel, 'div', step.tool, 'tool-name'); addText(panel, 'p', toolDescriptions[step.tool]);
+      addText(panel, 'div', '调用参数', 'trace-label'); addText(panel, 'pre', JSON.stringify(step.arguments, null, 2), 'trace-code');
+      addText(panel, 'div', '工具返回', 'trace-label'); addText(panel, 'pre', JSON.stringify(step.result, null, 2), 'trace-code');
+    }
+    $('demo-issue').textContent = DATA.demo_trace.issue;
+    $('baseline-code').textContent = DATA.demo_trace.baseline.exit_code;
+    $('baseline-output').textContent = DATA.demo_trace.baseline.output;
+    $('final-code').textContent = DATA.demo_trace.final.exit_code;
+    $('final-output').textContent = DATA.demo_trace.final.output;
+    $('demo-patch').textContent = DATA.demo_trace.patch;
     $('task-search').addEventListener('input', renderList);
-    renderFilters(); renderList();
+    renderFilters(); renderList(); renderTraceNav(); renderTracePanel();
   </script>
 </body>
 </html>

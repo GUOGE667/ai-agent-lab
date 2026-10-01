@@ -1,0 +1,48 @@
+{
+  "execution_mode": "scripted_offline_demo",
+  "issue": "The `add(a, b)` function returns the wrong result. Fix it without changing its public signature. Run the tests.",
+  "baseline": {
+    "exit_code": 1,
+    "output": "test_add_negative (test_calculator.CalculatorTests.test_add_negative) ... FAIL\ntest_add_positive (test_calculator.CalculatorTests.test_add_positive) ... FAIL\nAssertionError: -3 != -1\nAssertionError: -1 != 5\nRan 2 tests\nFAILED (failures=2)"
+  },
+  "steps": [
+    {
+      "step": 1,
+      "tool": "read_file",
+      "arguments": {
+        "path": "calculator.py"
+      },
+      "result": {
+        "path": "calculator.py",
+        "content": "def add(a: int, b: int) -> int:\n    return a - b\n"
+      }
+    },
+    {
+      "step": 2,
+      "tool": "replace_text",
+      "arguments": {
+        "path": "calculator.py",
+        "old": "return a - b",
+        "new": "return a + b"
+      },
+      "result": {
+        "changed": "calculator.py"
+      }
+    },
+    {
+      "step": 3,
+      "tool": "run_tests",
+      "arguments": {},
+      "result": {
+        "exit_code": 0,
+        "output": "test_add_negative (test_calculator.CalculatorTests.test_add_negative) ... ok\ntest_add_positive (test_calculator.CalculatorTests.test_add_positive) ... ok\nRan 2 tests\nOK",
+        "timed_out": false
+      }
+    }
+  ],
+  "final": {
+    "exit_code": 0,
+    "output": "test_add_negative (test_calculator.CalculatorTests.test_add_negative) ... ok\ntest_add_positive (test_calculator.CalculatorTests.test_add_positive) ... ok\nRan 2 tests\nOK"
+  },
+  "patch": "--- a/calculator.py\n+++ b/calculator.py\n@@ -1,2 +1,2 @@\n def add(a: int, b: int) -> int:\n-    return a - b\n+    return a + b\n"
+}

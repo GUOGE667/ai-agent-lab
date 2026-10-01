@@ -41,6 +41,7 @@ def build() -> str:
     fixes = json.loads(
         (ROOT / "real_tasks/checks/reference_fixes.json").read_text(encoding="utf-8")
     )
+    demo_trace = json.loads(Path(__file__).with_name("demo_trace.json").read_text(encoding="utf-8"))
     assert set(TITLES) == {task["id"] for task in real_tasks}
     assert set(fixes) == set(TITLES)
     payload = {
@@ -49,6 +50,7 @@ def build() -> str:
             "synthetic": len(examples),
             "projects": len({task["source"]["project"] for task in real_tasks}),
         },
+        "demo_trace": demo_trace,
         "tasks": [
             {
                 "id": task["id"],
