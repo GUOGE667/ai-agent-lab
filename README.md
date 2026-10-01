@@ -19,6 +19,7 @@
 python -m unittest discover -s tests -v
 python -m issue_agent.cli demo
 python -m issue_agent.cli check --tasks examples/tasks.json
+python -m issue_agent.cli verify --tasks examples/tasks.json --fixes examples/checks/reference_fixes.json
 python -m issue_agent.cli analyze .runs/某次运行目录 --include-demo
 ```
 
@@ -34,6 +35,8 @@ python -m issue_agent.cli eval --tasks examples/tasks.json --model gpt-5.1 --liv
 ```
 
 如果当前终端没有 `python` 命令，换成已安装的 Python 可执行文件。`{python}` 在测试命令中自动替换为运行 Agent 的 Python。测试命令必须是 JSON 字符串数组，执行时**不经过 shell**。
+
+`verify` 在任务临时副本中应用参考修复，确认修复前两组测试失败、修复后两组测试通过。参考修复只用于检查合成题是否可解，不代表 Agent 的模型能力，也不会改动原始示例文件。
 
 `demo` 使用预先写好的工具响应模拟 Agent，不连接模型服务，也不能用作模型效果数据。`analyze` 只读取已有报告，不重新运行模型；默认排除演示报告，`--include-demo` 仅供学习报告格式。运行结果会在 `.runs/` 下生成：
 

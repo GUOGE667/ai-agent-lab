@@ -97,6 +97,9 @@ def main(argv: list[str] | None = None) -> int:
     demo.add_argument("--output", type=Path)
     check = sub.add_parser("check", help="Validate task definitions and baseline tests offline")
     check.add_argument("--tasks", type=Path, required=True)
+    verify = sub.add_parser("verify", help="Validate baseline failures and reference fixes offline")
+    verify.add_argument("--tasks", type=Path, required=True)
+    verify.add_argument("--fixes", type=Path, required=True)
     analyze = sub.add_parser("analyze", help="Summarize saved run reports offline; no API usage")
     analyze.add_argument("reports", type=Path, nargs="+", help="Run directories or report.json files")
     analyze.add_argument("--include-demo", action="store_true", help="Include scripted demos in learning-only summaries")
@@ -148,6 +151,43 @@ def main(argv: list[str] | None = None) -> int:
                              "acceptance_baseline_fails": acceptance_valid, "check_exit_code": acceptance["exit_code"] if acceptance else None})
             print(json.dumps({"mode": "offline_check", "tasks": rows}, ensure_ascii=False, indent=2))
             return 0 if all(row["baseline_fails"] and row["acceptance_baseline_fails"] for row in rows) else 1
+        if args.mode == "verify":
+            tasks_path = args.tasks.expanduser().resolve(strict=True)
+            tasks = _load_tasks(tasks_path)
+            fixes = json.loads(args.fixes.expanduser().resolve(strict=True).read_text(encoding="utf-8"))
+            task_ids = {task["id"] for task in tasks}
+            if not isinstance(fixes, dict) or set(fixes) != task_ids:
+                raise ValueError("Reference fixes must match task IDs exactly")
+            rows = []
+            for task in tasks:
+                row = {"id": task["id"]}
+                try:
+                    edits = fixes[task["id"]]
+                    if not isinstance(edits, list) or not edits:
+                        raise ValueError("Reference fix needs at least one edit")
+                    repo = (tasks_path.parent / task["repo"]).resolve(strict=True)
+                    with Workspace(repo, task["test_command"]) as workspace:
+                        command = _check_command(task, tasks_path)
+                        baseline = workspace.run_tests()
+                        acceptance_baseline = workspace.run_tests(command) if command else None
+                        row["baseline_fails"] = baseline["exit_code"] not in (None, 0)
+                        row["acceptance_baseline_fails"] = acceptance_baseline is None or acceptance_baseline["exit_code"] not in (None, 0)
+                        for edit in edits:
+                            if not isinstance(edit, dict) or set(edit) != {"path", "old", "new"}:
+                                raise ValueError("Each reference edit needs path, old, and new")
+                            workspace.replace_text(edit["path"], edit["old"], edit["new"])
+                        row["public_after_passes"] = workspace.run_tests()["exit_code"] == 0
+                        row["acceptance_after_passes"] = command is None or workspace.run_tests(command)["exit_code"] == 0
+                        row["reference_edits_applied"] = len(edits)
+                except (OSError, ValueError, KeyError, TypeError) as exc:
+                    row["error"] = str(exc)
+                row["valid"] = all(row.get(field) for field in (
+                    "baseline_fails", "acceptance_baseline_fails", "public_after_passes", "acceptance_after_passes"
+                )) and "error" not in row
+                rows.append(row)
+            print(json.dumps({"mode": "offline_reference_validation", "validated": sum(row["valid"] for row in rows),
+                              "total": len(rows), "tasks": rows}, ensure_ascii=False, indent=2))
+            return 0 if all(row["valid"] for row in rows) else 1
         if args.mode == "analyze":
             rows = []
             skipped = 0

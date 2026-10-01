@@ -102,6 +102,16 @@ class WorkspaceTests(unittest.TestCase):
             self.assertEqual(work.run_tests()["exit_code"], 0)
             self.assertEqual(work.run_tests(_check_command(task, tasks_path))["exit_code"], 0)
 
+    def test_reference_fixes_validate_every_task(self):
+        tasks_path = Path(__file__).resolve().parent.parent / "examples" / "tasks.json"
+        fixes_path = tasks_path.parent / "checks" / "reference_fixes.json"
+        output = StringIO()
+        with redirect_stdout(output):
+            self.assertEqual(main(["verify", "--tasks", str(tasks_path), "--fixes", str(fixes_path)]), 0)
+        summary = json.loads(output.getvalue())
+        self.assertEqual(summary["validated"], len(_load_tasks(tasks_path)))
+        self.assertTrue(all(row["valid"] for row in summary["tasks"]))
+
 
 if __name__ == "__main__":
     unittest.main()

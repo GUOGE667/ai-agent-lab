@@ -17,4 +17,6 @@
 
 运行 `python -m issue_agent.cli check --tasks examples/tasks.json` 可验证每个任务的公开测试与独立验收在修复前都会失败。当前 10 个任务全是**合成练习题**，用于开发和回归检查；它们不能代表真实仓库上的模型修复能力，也没有在线模型通过率。
 
+运行 `python -m issue_agent.cli verify --tasks examples/tasks.json --fixes examples/checks/reference_fixes.json` 可进一步确认每题在临时副本中应用参考修复后，两组测试都通过。参考修复保存在任务目录之外；它们是题目完整性检查数据，不能计入 Agent 的通过率。
+
 正式评测需要另建固定版本的公开仓库任务集，记录仓库 commit、Issue 来源、独立验收测试和任务筛选过程。不要把此目录的合成任务计入简历中的真实效果指标。
