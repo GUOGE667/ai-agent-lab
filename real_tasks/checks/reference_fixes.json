@@ -1,0 +1,23 @@
+{
+  "tqdm-1-enumerate-start": [
+    {
+      "path": "tqdm/contrib/__init__.py",
+      "old": "return enumerate(tqdm_class(iterable, start, **tqdm_kwargs))",
+      "new": "return enumerate(tqdm_class(iterable, **tqdm_kwargs), start)"
+    }
+  ],
+  "tqdm-3-generator-bool": [
+    {
+      "path": "tqdm/_tqdm.py",
+      "old": "    def __len__(self):",
+      "new": "    def __bool__(self):\n        if self.total is not None:\n            return self.total > 0\n        if self.iterable is None:\n            raise TypeError('Boolean cast is undefined for tqdm objects that have no iterable or total')\n        return bool(self.iterable)\n\n    def __nonzero__(self):\n        return self.__bool__()\n\n    def __len__(self):"
+    }
+  ],
+  "tqdm-4-scale-no-total": [
+    {
+      "path": "tqdm/_tqdm.py",
+      "old": "            total *= unit_scale",
+      "new": "            if total:\n                total *= unit_scale"
+    }
+  ]
+}

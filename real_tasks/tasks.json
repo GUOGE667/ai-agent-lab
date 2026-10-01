@@ -1,0 +1,41 @@
+[
+  {
+    "id": "tqdm-1-enumerate-start",
+    "repo": "tqdm_1/repo",
+    "issue": "In tqdm.contrib.tenumerate, the start argument must set the first index returned by enumeration. For a two-item iterable and start=5, the indexes must be 5 and 6. Keep the default start at 0 and preserve the existing function signature. Run the tests.",
+    "test_command": ["{python}", "-m", "unittest", "-v", "test_issue"],
+    "check_command": ["{python}", "{tasks_dir}/checks/acceptance.py", "tqdm-1-enumerate-start"],
+    "source": {
+      "project": "tqdm/tqdm",
+      "dataset": "BugsInPy tqdm bug 1",
+      "buggy_commit": "8cc777fe8401a05d07f2c97e65d15e4460feab88",
+      "fixed_commit": "c0dcf39b046d1b4ff6de14ac99ad9a1b10487512"
+    }
+  },
+  {
+    "id": "tqdm-3-generator-bool",
+    "repo": "tqdm_3/repo",
+    "issue": "A tqdm instance wrapping an iterable without a known length must have a defined truth value. Casting it to bool should be true without consuming the iterable. Preserve the behavior for known totals and run the tests.",
+    "test_command": ["{python}", "-m", "unittest", "-v", "test_issue"],
+    "check_command": ["{python}", "{tasks_dir}/checks/acceptance.py", "tqdm-3-generator-bool"],
+    "source": {
+      "project": "tqdm/tqdm",
+      "dataset": "BugsInPy tqdm bug 3",
+      "buggy_commit": "c2599e3cd6087429f48bae34347ec5d2473c8392",
+      "fixed_commit": "73962a47026dd980ac0758820efc9c41cbf938e0"
+    }
+  },
+  {
+    "id": "tqdm-4-scale-no-total",
+    "repo": "tqdm_4/repo",
+    "issue": "tqdm.format_meter must support numeric unit_scale when total is unknown (None). Scale the completed count and rate without trying to multiply an unknown total; keep known-total formatting working. Run the tests.",
+    "test_command": ["{python}", "-m", "unittest", "-v", "test_issue"],
+    "check_command": ["{python}", "{tasks_dir}/checks/acceptance.py", "tqdm-4-scale-no-total"],
+    "source": {
+      "project": "tqdm/tqdm",
+      "dataset": "BugsInPy tqdm bug 4",
+      "buggy_commit": "03b347646492131d889871939b40457d29147216",
+      "fixed_commit": "964dee631d0ed30e2f799b42fc58ba5e73795a08"
+    }
+  }
+]
