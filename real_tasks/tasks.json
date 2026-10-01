@@ -180,5 +180,44 @@
       "buggy_commit": "81ee310adcd905fbdf7c98d9fb6ef0c5a46026c2",
       "fixed_commit": "1d02ed606f1c52636462633d009bdcbaac644331"
     }
+  },
+  {
+    "id": "youtube-dl-1-boolean-filter",
+    "repo": "youtube_dl_1/repo",
+    "issue": "The youtube-dl match_filter_func unary filter must treat a boolean False as false, not merely as a present value. A positive is_live filter must reject False, while !is_live must accept it. Preserve existing handling for missing and non-boolean values. Run the tests.",
+    "test_command": ["{python}", "-m", "unittest", "-v", "test_issue"],
+    "check_command": ["{python}", "{tasks_dir}/checks/acceptance.py", "youtube-dl-1-boolean-filter"],
+    "source": {
+      "project": "ytdl-org/youtube-dl",
+      "dataset": "BugsInPy youtube-dl bug 1",
+      "buggy_commit": "99036a1298089068dcf80c0985bfcc3f8c24f281",
+      "fixed_commit": "1cc47c667419e0eadc0a6989256ab7b276852adf"
+    }
+  },
+  {
+    "id": "youtube-dl-3-html-unescape",
+    "repo": "youtube_dl_3/repo",
+    "issue": "unescapeHTML must decode a valid HTML entity even when it appears after an earlier unknown ampersand sequence. For example, &foo&amp;bar; should become &foo&bar;. Keep the unknown sequence unchanged. Run the tests.",
+    "test_command": ["{python}", "-m", "unittest", "-v", "test_issue"],
+    "check_command": ["{python}", "{tasks_dir}/checks/acceptance.py", "youtube-dl-3-html-unescape"],
+    "source": {
+      "project": "ytdl-org/youtube-dl",
+      "dataset": "BugsInPy youtube-dl bug 3",
+      "buggy_commit": "f5469da9e6e259c1690c7ef54f1da1c19f65036f",
+      "fixed_commit": "95f3f7c20a05e7ac490e768b8470b20538ef8581"
+    }
+  },
+  {
+    "id": "youtube-dl-4-zero-arg-call",
+    "repo": "youtube_dl_4/repo",
+    "issue": "The JavaScript interpreter must evaluate calls to functions with zero arguments, including nested calls such as run() returning zero(). Keep calls with arguments working. Run the tests.",
+    "test_command": ["{python}", "-m", "unittest", "-v", "test_issue"],
+    "check_command": ["{python}", "{tasks_dir}/checks/acceptance.py", "youtube-dl-4-zero-arg-call"],
+    "source": {
+      "project": "ytdl-org/youtube-dl",
+      "dataset": "BugsInPy youtube-dl bug 4",
+      "buggy_commit": "bc40b3a5ba44006c23daf7fe0ed872af5e33bdc5",
+      "fixed_commit": "189935f15960300d316e8b07108b076ac6c2186a"
+    }
   }
 ]

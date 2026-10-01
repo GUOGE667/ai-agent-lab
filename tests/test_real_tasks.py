@@ -14,7 +14,7 @@ class RealTaskIntegrityTests(unittest.TestCase):
         for task in _load_tasks(tasks_path):
             with self.subTest(task=task["id"]):
                 source = task["source"]
-                self.assertIn(source["project"], {"tqdm/tqdm", "cool-RR/PySnooper", "tornadoweb/tornado"})
+                self.assertIn(source["project"], {"tqdm/tqdm", "cool-RR/PySnooper", "tornadoweb/tornado", "ytdl-org/youtube-dl"})
                 for field in ("buggy_commit", "fixed_commit"):
                     self.assertRegex(source[field], r"\A[0-9a-f]{40}\Z")
                 repo = tasks_path.parent / task["repo"]

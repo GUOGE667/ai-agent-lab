@@ -185,6 +185,29 @@ class ForceCurrentAcceptance(unittest.TestCase):
             IOLoop.clear_current()
 
 
+class BooleanFilterAcceptance(unittest.TestCase):
+    def test_negated_filter_accepts_false_boolean(self):
+        from youtube_dl.utils import match_filter_func
+
+        self.assertIsNone(match_filter_func("!is_live")({"is_live": False}))
+        self.assertIsNotNone(match_filter_func("!is_live")({"is_live": True}))
+
+
+class HtmlUnescapeAcceptance(unittest.TestCase):
+    def test_later_entity_is_unescaped_without_consuming_earlier_ampersand(self):
+        from youtube_dl.utils import unescapeHTML
+
+        self.assertEqual(unescapeHTML("&unknown&amp;done;"), "&unknown&done;")
+
+
+class ZeroArgumentFunctionAcceptance(unittest.TestCase):
+    def test_different_function_names_without_arguments(self):
+        from youtube_dl.jsinterp import JSInterpreter
+
+        source = "function empty(){return 3;} function outer(){return empty();}"
+        self.assertEqual(JSInterpreter(source).call_function("outer"), 3)
+
+
 CASES = {
     "tqdm-1-enumerate-start": EnumerateStartAcceptance,
     "tqdm-2-ansi-trim": AnsiTrimAcceptance,
@@ -200,6 +223,9 @@ CASES = {
     "tornado-5-backward-clock": PeriodicCallbackAcceptance,
     "tornado-9-none-url-args": UrlConcatAcceptance,
     "tornado-14-force-current": ForceCurrentAcceptance,
+    "youtube-dl-1-boolean-filter": BooleanFilterAcceptance,
+    "youtube-dl-3-html-unescape": HtmlUnescapeAcceptance,
+    "youtube-dl-4-zero-arg-call": ZeroArgumentFunctionAcceptance,
 }
 
 

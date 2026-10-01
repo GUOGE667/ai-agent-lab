@@ -82,5 +82,16 @@
   ],
   "tornado-14-force-current": [
     {"path": "tornado/ioloop.py", "old": "        elif make_current:\n            if IOLoop.current(instance=False) is None:", "new": "        elif make_current:\n            if IOLoop.current(instance=False) is not None:"}
+  ],
+  "youtube-dl-1-boolean-filter": [
+    {"path": "youtube_dl/utils.py", "old": "        '': lambda v: v is not None,", "new": "        '': lambda v: (v is True) if isinstance(v, bool) else (v is not None),"},
+    {"path": "youtube_dl/utils.py", "old": "        '!': lambda v: v is None,", "new": "        '!': lambda v: (v is False) if isinstance(v, bool) else (v is None),"}
+  ],
+  "youtube-dl-3-html-unescape": [
+    {"path": "youtube_dl/utils.py", "old": "r'&([^;]+;)'", "new": "r'&([^&;]+;)'"}
+  ],
+  "youtube-dl-4-zero-arg-call": [
+    {"path": "youtube_dl/jsinterp.py", "old": "(?P<args>[a-zA-Z0-9_$,]+)", "new": "(?P<args>[a-zA-Z0-9_$,]*)"},
+    {"path": "youtube_dl/jsinterp.py", "old": "for v in m.group('args').split(',')])", "new": "for v in m.group('args').split(',')]) if len(m.group('args')) > 0 else tuple()"}
   ]
 }

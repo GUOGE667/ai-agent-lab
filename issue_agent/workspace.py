@@ -10,7 +10,8 @@ import tempfile
 from pathlib import Path
 
 
-MAX_FILE_BYTES = 100_000
+MAX_FILE_BYTES = 150_000
+MAX_FULL_READ_BYTES = 20_000
 MAX_OUTPUT_CHARS = 12_000
 MAX_CHANGED_FILES = 5
 MAX_EDIT_OPERATIONS = 20
@@ -79,7 +80,23 @@ class Workspace:
         target = self._path(path)
         if target.stat().st_size > MAX_FILE_BYTES:
             raise ValueError("File is too large")
+        if target.stat().st_size > MAX_FULL_READ_BYTES:
+            raise ValueError("File is too large for read_file; use read_lines")
         return {"path": path, "content": target.read_text(encoding="utf-8")}
+
+    def read_lines(self, path: str, start_line: int, line_count: int) -> dict:
+        target = self._path(path)
+        if target.stat().st_size > MAX_FILE_BYTES:
+            raise ValueError("File is too large")
+        if not isinstance(start_line, int) or not isinstance(line_count, int) or start_line < 1 or not 1 <= line_count <= 100:
+            raise ValueError("start_line must be positive and line_count must be 1 to 100")
+        lines = target.read_text(encoding="utf-8").splitlines()
+        if start_line > len(lines):
+            raise ValueError("start_line is past the end of the file")
+        selected = lines[start_line - 1:start_line - 1 + line_count]
+        content = "\n".join(f"{number}: {line}" for number, line in enumerate(selected, start_line))
+        return {"path": path, "start_line": start_line, "end_line": start_line + len(selected) - 1,
+                "content": content[:MAX_OUTPUT_CHARS], "truncated": len(content) > MAX_OUTPUT_CHARS}
 
     def search(self, query: str) -> dict:
         if not query or len(query) > 200:
@@ -105,7 +122,9 @@ class Workspace:
         self._check_edit_budget(path)
         if not old or len(new) > MAX_FILE_BYTES:
             raise ValueError("Replacement is empty or too large")
-        current = self.read_file(path)["content"]
+        if target.stat().st_size > MAX_FILE_BYTES:
+            raise ValueError("File is too large")
+        current = target.read_text(encoding="utf-8")
         count = current.count(old)
         if count != 1:
             raise ValueError(f"Expected one exact match, found {count}")

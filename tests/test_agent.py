@@ -47,6 +47,20 @@ class WorkspaceTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 work.create_file("module_5.py", "value = 1\n")
 
+    def test_large_source_can_be_read_in_lines_and_edited(self):
+        source = "# historical source\n" + "value = 1\n" * 12000
+        (self.source / "large.py").write_text(source, encoding="utf-8")
+        with Workspace(self.source, ["{python}", "-m", "unittest"]) as work:
+            with self.assertRaisesRegex(ValueError, "use read_lines"):
+                work.read_file("large.py")
+            excerpt = work.read_lines("large.py", 1, 2)
+            self.assertIn("1: # historical source", excerpt["content"])
+            self.assertIn("2: value = 1", excerpt["content"])
+            with self.assertRaises(ValueError):
+                work.read_lines("large.py", 0, 2)
+            work.replace_text("large.py", "# historical source", "# repaired source")
+            self.assertTrue(work.read_lines("large.py", 1, 1)["content"].endswith("# repaired source"))
+
     def test_mock_agent_loop(self):
         responses = [
             {"id": "r1", "output": [{"type": "function_call", "call_id": "c1", "name": "read_file", "arguments": '{"path":"calc.py"}'}], "usage": {"total_tokens": 10}},

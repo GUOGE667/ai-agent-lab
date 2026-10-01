@@ -7,7 +7,7 @@
 - 已实现单 Agent 工具循环、文件路径限制、测试命令超时、运行记录、批量任务评测。
 - 已限制单次任务最多修改 5 个文件、执行 20 次编辑；评测会输出失败类别和工具错误数。
 - 已有离线单元测试和 10 个覆盖不同错误类型的合成 Issue；每个任务另有不放入 Agent 临时仓库的独立验收检查。[任务目录](examples/README.md)列出各任务的验收重点。
-- 已加入 14 个来自 tqdm、PySnooper 和 Tornado 历史修复记录的[真实缺陷任务](real_tasks/README.md)，固定源码提交并验证修复前后行为。
+- 已加入 17 个来自 tqdm、PySnooper、Tornado 和 youtube-dl 历史修复记录的[真实缺陷任务](real_tasks/README.md)，固定源码提交并验证修复前后行为。
 - 默认只运行离线演示或检查。真实模型命令必须显式加 `--live`；当前不会调用 API。
 - **尚无真实模型成功率数据。**当前只验证了离线工具链；不要在简历中填写未经实测的通过率。
 - [项目架构与五部分进度](docs/architecture.md)记录已完成工作和后续验收条件。
@@ -51,11 +51,11 @@ python -m issue_agent.cli eval --tasks examples/tasks.json --model gpt-5.1 --liv
 
 | 工具 | 用途 |
 |---|---|
-| `list_files`、`search`、`read_file` | 定位代码与读取上下文 |
+| `list_files`、`search`、`read_file`、`read_lines` | 定位代码与按行读取大文件 |
 | `replace_text`、`create_file` | 修改临时副本中的源文件 |
 | `run_tests` | 运行预先指定的测试命令 |
 
-文件工具拒绝越界路径、符号链接、`.env` 文件和测试文件；单文件大小上限为 100 KB。模型不能自选 shell 命令。测试进程只继承必要的环境变量，不继承 `OPENAI_API_KEY`。这是**可信本地仓库的实验工具**；测试仍会执行仓库代码，处理不可信仓库前应加入容器隔离和网络限制。OpenAI 的[工具文档](https://developers.openai.com/api/docs/guides/function-calling)描述了函数调用循环，[Shell 安全说明](https://developers.openai.com/api/docs/guides/tools-shell)建议限制执行范围并保留日志。
+文件工具拒绝越界路径、符号链接、`.env` 文件和测试文件；可检索、编辑的单文件大小上限为 150 KB。超过 20 KB 的文件需用 `read_lines` 按行读取，避免一次返回大量内容。模型不能自选 shell 命令。测试进程只继承必要的环境变量，不继承 `OPENAI_API_KEY`。这是**可信本地仓库的实验工具**；测试仍会执行仓库代码，处理不可信仓库前应加入容器隔离和网络限制。OpenAI 的[工具文档](https://developers.openai.com/api/docs/guides/function-calling)描述了函数调用循环，[Shell 安全说明](https://developers.openai.com/api/docs/guides/tools-shell)建议限制执行范围并保留日志。
 
 ## 如何做可写入简历的评测
 
