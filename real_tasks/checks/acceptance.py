@@ -20,6 +20,15 @@ class EnumerateStartAcceptance(unittest.TestCase):
                          [(-2, "x"), (-1, "y")])
 
 
+class AnsiTrimAcceptance(unittest.TestCase):
+    def test_existing_reset_is_not_repeated(self):
+        from tqdm.utils import disp_trim
+
+        escape = "\x1b"
+        source = f"*****{escape}[22m*****{escape}[0m**"
+        self.assertEqual(disp_trim(source, 10), f"*****{escape}[22m*****{escape}[0m")
+
+
 class GeneratorBoolAcceptance(unittest.TestCase):
     def test_truth_check_does_not_consume_generator(self):
         from tqdm import tqdm
@@ -59,10 +68,55 @@ class ScaleWithoutTotalAcceptance(unittest.TestCase):
         self.assertIn("4/8", rendered)
 
 
+class DisabledBoolAcceptance(unittest.TestCase):
+    def test_zero_total_is_false(self):
+        from tqdm import tqdm
+
+        self.assertFalse(bool(tqdm(total=0, disable=True)))
+
+
+class DisabledIteratorAcceptance(unittest.TestCase):
+    def test_generator_can_be_consumed(self):
+        from tqdm import tqdm
+
+        values = (item for item in ("a", "b"))
+        self.assertEqual(list(tqdm(values, disable=True)), ["a", "b"])
+
+
+class OptionBoundaryAcceptance(unittest.TestCase):
+    def test_embedded_dashes_do_not_create_options(self):
+        from tqdm._main import RE_SHLEX
+
+        self.assertEqual(RE_SHLEX.findall("prefix--fake --desc demo"), ["desc"])
+
+
+class CustomBarFormatAcceptance(unittest.TestCase):
+    def test_user_segments_around_bar(self):
+        from tqdm import tqdm
+
+        rendered = tqdm.format_meter(2, 4, 1, ncols=20, bar_format="LEFT{bar}RIGHT")
+        self.assertTrue(rendered.startswith("LEFT"), rendered)
+        self.assertTrue(rendered.endswith("RIGHT"), rendered)
+
+
+class SiBoundaryAcceptance(unittest.TestCase):
+    def test_rounding_at_smaller_thresholds(self):
+        from tqdm._tqdm import format_sizeof
+
+        self.assertEqual(format_sizeof(9.999), "10.0")
+        self.assertEqual(format_sizeof(99.99), "100")
+
+
 CASES = {
     "tqdm-1-enumerate-start": EnumerateStartAcceptance,
+    "tqdm-2-ansi-trim": AnsiTrimAcceptance,
     "tqdm-3-generator-bool": GeneratorBoolAcceptance,
     "tqdm-4-scale-no-total": ScaleWithoutTotalAcceptance,
+    "tqdm-5-disabled-bool": DisabledBoolAcceptance,
+    "tqdm-6-disabled-iterator": DisabledIteratorAcceptance,
+    "tqdm-7-option-boundary": OptionBoundaryAcceptance,
+    "tqdm-8-custom-bar-format": CustomBarFormatAcceptance,
+    "tqdm-9-si-boundary": SiBoundaryAcceptance,
 }
 
 

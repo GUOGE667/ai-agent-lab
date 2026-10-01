@@ -6,6 +6,13 @@
       "new": "return enumerate(tqdm_class(iterable, **tqdm_kwargs), start)"
     }
   ],
+  "tqdm-2-ansi-trim": [
+    {
+      "path": "tqdm/utils.py",
+      "old": "return data + \"\\033[0m\"",
+      "new": "return data if data.endswith(\"\\033[0m\") else data + \"\\033[0m\""
+    }
+  ],
   "tqdm-3-generator-bool": [
     {
       "path": "tqdm/_tqdm.py",
@@ -19,5 +26,38 @@
       "old": "            total *= unit_scale",
       "new": "            if total:\n                total *= unit_scale"
     }
+  ],
+  "tqdm-5-disabled-bool": [
+    {
+      "path": "tqdm/_tqdm.py",
+      "old": "            self.n = initial\n            return",
+      "new": "            self.n = initial\n            self.total = total\n            return"
+    }
+  ],
+  "tqdm-6-disabled-iterator": [
+    {
+      "path": "tqdm/_tqdm.py",
+      "old": "else self.total)",
+      "new": "else getattr(self, 'total', None))"
+    }
+  ],
+  "tqdm-7-option-boundary": [
+    {
+      "path": "tqdm/_main.py",
+      "old": "RE_SHLEX = re.compile(r'\\s*--?([^\\s=]+)(?:\\s*|=|$)')",
+      "new": "RE_SHLEX = re.compile(r'\\s*(?<!\\S)--?([^\\s=]+)(?:\\s*|=|$)')"
+    }
+  ],
+  "tqdm-8-custom-bar-format": [
+    {
+      "path": "tqdm/_tqdm.py",
+      "old": "l_bar, r_bar = l_bar.format(**bar_args), r_bar.format(**bar_args)",
+      "new": "l_bar, r_bar = l_bar_user.format(**bar_args), r_bar_user.format(**bar_args)"
+    }
+  ],
+  "tqdm-9-si-boundary": [
+    {"path": "tqdm/_tqdm.py", "old": "if abs(num) < 1000.0:", "new": "if abs(num) < 999.95:"},
+    {"path": "tqdm/_tqdm.py", "old": "if abs(num) < 100.0:", "new": "if abs(num) < 99.95:"},
+    {"path": "tqdm/_tqdm.py", "old": "if abs(num) < 10.0:", "new": "if abs(num) < 9.995:"}
   ]
 }
