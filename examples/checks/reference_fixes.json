@@ -1,0 +1,33 @@
+{
+  "calculator-add": [
+    {"path": "calculator.py", "old": "return a - b", "new": "return a + b"}
+  ],
+  "slugify-normalization": [
+    {"path": "slug.py", "old": "return title.replace(\" \", \"-\")", "new": "return \"-\".join(title.lower().split())"}
+  ],
+  "config-value-equals": [
+    {"path": "config.py", "old": "key, value = line.split(\"=\")", "new": "key, value = line.split(\"=\", 1)"}
+  ],
+  "pagination-one-based": [
+    {"path": "pagination.py", "old": "start = page_number * page_size", "new": "start = (page_number - 1) * page_size"}
+  ],
+  "retry-attempt-budget": [
+    {"path": "retry.py", "old": "range(max_attempts - 1)", "new": "range(max_attempts)"}
+  ],
+  "dedupe-stable-order": [
+    {"path": "dedupe.py", "old": "return sorted(set(items))", "new": "return list(dict.fromkeys(items))"}
+  ],
+  "median-even-length": [
+    {"path": "median.py", "old": "return ordered[len(ordered) // 2]", "new": "middle = len(ordered) // 2\n    if len(ordered) % 2:\n        return ordered[middle]\n    return (ordered[middle - 1] + ordered[middle]) / 2"}
+  ],
+  "query-encoding": [
+    {"path": "query.py", "old": "from urllib.parse import quote", "new": "from urllib.parse import urlencode"},
+    {"path": "query.py", "old": "return \"&\".join(f\"{key}={quote(value)}\" for key, value in params.items())", "new": "return urlencode(params)"}
+  ],
+  "inventory-unknown-sku": [
+    {"path": "inventory.py", "old": "updated[sku] = updated.get(sku, 0) - quantity\n        if quantity < 0 or updated[sku] < 0:\n            raise ValueError(\"invalid reservation\")", "new": "if sku not in updated or quantity < 0 or quantity > updated[sku]:\n            raise ValueError(\"invalid reservation\")\n        updated[sku] -= quantity"}
+  ],
+  "filename-final-extension": [
+    {"path": "filename.py", "old": "return filename.split(\".\")[1].lower()", "new": "stem, suffix = filename.rsplit(\".\", 1)\n    return suffix.lower() if stem else \"\""}
+  ]
+}

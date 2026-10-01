@@ -1,0 +1,262 @@
+[
+  {
+    "id": "tqdm-1-enumerate-start",
+    "repo": "tqdm_1/repo",
+    "issue": "In tqdm.contrib.tenumerate, the start argument must set the first index returned by enumeration. For a two-item iterable and start=5, the indexes must be 5 and 6. Keep the default start at 0 and preserve the existing function signature. Run the tests.",
+    "test_command": ["{python}", "-m", "unittest", "-v", "test_issue"],
+    "check_command": ["{python}", "{tasks_dir}/checks/acceptance.py", "tqdm-1-enumerate-start"],
+    "source": {
+      "project": "tqdm/tqdm",
+      "dataset": "BugsInPy tqdm bug 1",
+      "buggy_commit": "8cc777fe8401a05d07f2c97e65d15e4460feab88",
+      "fixed_commit": "c0dcf39b046d1b4ff6de14ac99ad9a1b10487512"
+    }
+  },
+  {
+    "id": "tqdm-2-ansi-trim",
+    "repo": "tqdm_2/repo",
+    "issue": "When a custom bar containing ANSI control codes is shortened to ncols, do not append a second reset sequence if the trimmed result already ends with an ANSI reset. Keep the visible width correct and run the tests.",
+    "test_command": ["{python}", "-m", "unittest", "-v", "test_issue"],
+    "check_command": ["{python}", "{tasks_dir}/checks/acceptance.py", "tqdm-2-ansi-trim"],
+    "source": {
+      "project": "tqdm/tqdm",
+      "dataset": "BugsInPy tqdm bug 2",
+      "buggy_commit": "bef86db56654d271838b145ad77f7040a73a7b4d",
+      "fixed_commit": "127af5caf19e7d29c346f5ca8a9c7ef3004b664b"
+    }
+  },
+  {
+    "id": "tqdm-3-generator-bool",
+    "repo": "tqdm_3/repo",
+    "issue": "A tqdm instance wrapping an iterable without a known length must have a defined truth value. Casting it to bool should be true without consuming the iterable. Preserve the behavior for known totals and run the tests.",
+    "test_command": ["{python}", "-m", "unittest", "-v", "test_issue"],
+    "check_command": ["{python}", "{tasks_dir}/checks/acceptance.py", "tqdm-3-generator-bool"],
+    "source": {
+      "project": "tqdm/tqdm",
+      "dataset": "BugsInPy tqdm bug 3",
+      "buggy_commit": "c2599e3cd6087429f48bae34347ec5d2473c8392",
+      "fixed_commit": "73962a47026dd980ac0758820efc9c41cbf938e0"
+    }
+  },
+  {
+    "id": "tqdm-4-scale-no-total",
+    "repo": "tqdm_4/repo",
+    "issue": "tqdm.format_meter must support numeric unit_scale when total is unknown (None). Scale the completed count and rate without trying to multiply an unknown total; keep known-total formatting working. Run the tests.",
+    "test_command": ["{python}", "-m", "unittest", "-v", "test_issue"],
+    "check_command": ["{python}", "{tasks_dir}/checks/acceptance.py", "tqdm-4-scale-no-total"],
+    "source": {
+      "project": "tqdm/tqdm",
+      "dataset": "BugsInPy tqdm bug 4",
+      "buggy_commit": "03b347646492131d889871939b40457d29147216",
+      "fixed_commit": "964dee631d0ed30e2f799b42fc58ba5e73795a08"
+    }
+  },
+  {
+    "id": "tqdm-5-disabled-bool",
+    "repo": "tqdm_5/repo",
+    "issue": "A disabled tqdm instance with an explicit total must retain that total so its truth value is defined: total=10 is true and total=0 is false. Keep disabled progress display behavior and run the tests.",
+    "test_command": ["{python}", "-m", "unittest", "-v", "test_issue"],
+    "check_command": ["{python}", "{tasks_dir}/checks/acceptance.py", "tqdm-5-disabled-bool"],
+    "source": {
+      "project": "tqdm/tqdm",
+      "dataset": "BugsInPy tqdm bug 5",
+      "buggy_commit": "19b08ab34fdbfa0275bc5cb2430436c724c7e759",
+      "fixed_commit": "4f340697af69b71850aad496387c9c5aa1904136"
+    }
+  },
+  {
+    "id": "tqdm-6-disabled-iterator",
+    "repo": "tqdm_6/repo",
+    "issue": "Wrapping an iterator with no known length in a disabled tqdm instance must still allow consumers such as list() to iterate successfully. Do not require a total attribute that may not exist on the disabled instance. Run the tests.",
+    "test_command": ["{python}", "-m", "unittest", "-v", "test_issue"],
+    "check_command": ["{python}", "{tasks_dir}/checks/acceptance.py", "tqdm-6-disabled-iterator"],
+    "source": {
+      "project": "tqdm/tqdm",
+      "dataset": "BugsInPy tqdm bug 6",
+      "buggy_commit": "a4b9c86db548b2d0dbb5af7a6bbdc26ab47e1eec",
+      "fixed_commit": "6dad2e89019317e875c46d5a3a82a811ad6de2f9"
+    }
+  },
+  {
+    "id": "tqdm-7-option-boundary",
+    "repo": "tqdm_7/repo",
+    "issue": "The tqdm CLI option parser must recognize --name only at the beginning of input or after whitespace. A double dash inside ordinary text such as value--oops is not a new option. Preserve normal --total parsing and run the tests.",
+    "test_command": ["{python}", "-m", "unittest", "-v", "test_issue"],
+    "check_command": ["{python}", "{tasks_dir}/checks/acceptance.py", "tqdm-7-option-boundary"],
+    "source": {
+      "project": "tqdm/tqdm",
+      "dataset": "BugsInPy tqdm bug 7",
+      "buggy_commit": "caefe02fd6f3165e5634460ab20caf4c60400120",
+      "fixed_commit": "4efd35246c924236f34d8130b1055a3c3ba78605"
+    }
+  },
+  {
+    "id": "tqdm-8-custom-bar-format",
+    "repo": "tqdm_8/repo",
+    "issue": "tqdm.format_meter must honor a user bar_format that contains {bar}. Format the user-supplied left and right segments around the progress bar, including placeholders such as {n_fmt} and {total_fmt}. Run the tests.",
+    "test_command": ["{python}", "-m", "unittest", "-v", "test_issue"],
+    "check_command": ["{python}", "{tasks_dir}/checks/acceptance.py", "tqdm-8-custom-bar-format"],
+    "source": {
+      "project": "tqdm/tqdm",
+      "dataset": "BugsInPy tqdm bug 8",
+      "buggy_commit": "08b8ad1ff3bd003ef8309faaa0cc108ffa40317d",
+      "fixed_commit": "cae9d139c6df5614be3bf6e25ccbd600ee3286dc"
+    }
+  },
+  {
+    "id": "tqdm-9-si-boundary",
+    "repo": "tqdm_9/repo",
+    "issue": "format_sizeof must choose SI units based on the value that will be displayed after rounding. Values near 10, 100, and 1000 should not render as misleading 10.00, 100.0, or 1000 in the smaller unit. Run the tests.",
+    "test_command": ["{python}", "-m", "unittest", "-v", "test_issue"],
+    "check_command": ["{python}", "{tasks_dir}/checks/acceptance.py", "tqdm-9-si-boundary"],
+    "source": {
+      "project": "tqdm/tqdm",
+      "dataset": "BugsInPy tqdm bug 9",
+      "buggy_commit": "9da1d5d116aec7a23d8f6dc22d5e23ecb1c40a7c",
+      "fixed_commit": "d877c1dfb4739852105f7b967a8fceb869ac5042"
+    }
+  },
+  {
+    "id": "pysnooper-1-unicode-log",
+    "repo": "pysnooper_1/repo",
+    "issue": "PySnooper must preserve non-ASCII source lines in its trace and write a log file that can be read as UTF-8. A traced function containing Chinese text should show that text in the source line and return value. Run the tests.",
+    "test_command": ["{python}", "-m", "unittest", "-v", "test_issue"],
+    "check_command": ["{python}", "{tasks_dir}/checks/acceptance.py", "pysnooper-1-unicode-log"],
+    "source": {
+      "project": "cool-RR/PySnooper",
+      "dataset": "BugsInPy PySnooper bug 1",
+      "buggy_commit": "e21a31162f4c54be693d8ca8260e42393b39abd3",
+      "fixed_commit": "56f22f8ffe1c6b2be4d2cf3ad1987fdb66113da2"
+    }
+  },
+  {
+    "id": "pysnooper-2-custom-repr",
+    "repo": "pysnooper_2/repo",
+    "issue": "Allow PySnooper's snoop decorator to accept custom_repr rules. A single (type, formatter) pair or a sequence of (predicate, formatter) pairs should change how matching local variables and return values are displayed. Keep default repr behavior for unmatched values. Run the tests.",
+    "test_command": ["{python}", "-m", "unittest", "-v", "test_issue"],
+    "check_command": ["{python}", "{tasks_dir}/checks/acceptance.py", "pysnooper-2-custom-repr"],
+    "source": {
+      "project": "cool-RR/PySnooper",
+      "dataset": "BugsInPy PySnooper bug 2",
+      "buggy_commit": "e21a31162f4c54be693d8ca8260e42393b39abd3",
+      "fixed_commit": "814abc34a098c1b98cb327105ac396f985d2413e"
+    }
+  },
+  {
+    "id": "tornado-5-backward-clock",
+    "repo": "tornado_5/repo",
+    "issue": "PeriodicCallback must advance its next timeout by one interval when the clock moves slightly backwards. With an existing next timeout of 10.0 seconds, a one-second interval, and a current time of 9.5 seconds, the following timeout must be 11.0. Run the tests.",
+    "test_command": ["{python}", "-m", "unittest", "-v", "test_issue"],
+    "check_command": ["{python}", "{tasks_dir}/checks/acceptance.py", "tornado-5-backward-clock"],
+    "source": {
+      "project": "tornadoweb/tornado",
+      "dataset": "BugsInPy tornado bug 5",
+      "buggy_commit": "2d4053daa56c609d642b214399e046671d4a593e",
+      "fixed_commit": "886643965b5cb782503d8d7b374b7a794ec2077b"
+    }
+  },
+  {
+    "id": "tornado-9-none-url-args",
+    "repo": "tornado_9/repo",
+    "issue": "tornado.httputil.url_concat should accept None for args and return the original URL unchanged, including an existing query and fragment. Keep normal behavior for dictionaries and pairs. Run the tests.",
+    "test_command": ["{python}", "-m", "unittest", "-v", "test_issue"],
+    "check_command": ["{python}", "{tasks_dir}/checks/acceptance.py", "tornado-9-none-url-args"],
+    "source": {
+      "project": "tornadoweb/tornado",
+      "dataset": "BugsInPy tornado bug 9",
+      "buggy_commit": "c9d2a3fa573987629ad576e991c2f3b65f4daab4",
+      "fixed_commit": "86cc31f52992fb9d11f92de6fd5496842fea2265"
+    }
+  },
+  {
+    "id": "tornado-14-force-current",
+    "repo": "tornado_14/repo",
+    "issue": "IOLoop(make_current=True) should create and set the current loop when none exists, and raise RuntimeError without replacing the current loop when one already exists. Run the tests.",
+    "test_command": ["{python}", "-m", "unittest", "-v", "test_issue"],
+    "check_command": ["{python}", "{tasks_dir}/checks/acceptance.py", "tornado-14-force-current"],
+    "source": {
+      "project": "tornadoweb/tornado",
+      "dataset": "BugsInPy tornado bug 14",
+      "buggy_commit": "81ee310adcd905fbdf7c98d9fb6ef0c5a46026c2",
+      "fixed_commit": "1d02ed606f1c52636462633d009bdcbaac644331"
+    }
+  },
+  {
+    "id": "youtube-dl-1-boolean-filter",
+    "repo": "youtube_dl_1/repo",
+    "issue": "The youtube-dl match_filter_func unary filter must treat a boolean False as false, not merely as a present value. A positive is_live filter must reject False, while !is_live must accept it. Preserve existing handling for missing and non-boolean values. Run the tests.",
+    "test_command": ["{python}", "-m", "unittest", "-v", "test_issue"],
+    "check_command": ["{python}", "{tasks_dir}/checks/acceptance.py", "youtube-dl-1-boolean-filter"],
+    "source": {
+      "project": "ytdl-org/youtube-dl",
+      "dataset": "BugsInPy youtube-dl bug 1",
+      "buggy_commit": "99036a1298089068dcf80c0985bfcc3f8c24f281",
+      "fixed_commit": "1cc47c667419e0eadc0a6989256ab7b276852adf"
+    }
+  },
+  {
+    "id": "youtube-dl-3-html-unescape",
+    "repo": "youtube_dl_3/repo",
+    "issue": "unescapeHTML must decode a valid HTML entity even when it appears after an earlier unknown ampersand sequence. For example, &foo&amp;bar; should become &foo&bar;. Keep the unknown sequence unchanged. Run the tests.",
+    "test_command": ["{python}", "-m", "unittest", "-v", "test_issue"],
+    "check_command": ["{python}", "{tasks_dir}/checks/acceptance.py", "youtube-dl-3-html-unescape"],
+    "source": {
+      "project": "ytdl-org/youtube-dl",
+      "dataset": "BugsInPy youtube-dl bug 3",
+      "buggy_commit": "f5469da9e6e259c1690c7ef54f1da1c19f65036f",
+      "fixed_commit": "95f3f7c20a05e7ac490e768b8470b20538ef8581"
+    }
+  },
+  {
+    "id": "youtube-dl-4-zero-arg-call",
+    "repo": "youtube_dl_4/repo",
+    "issue": "The JavaScript interpreter must evaluate calls to functions with zero arguments, including nested calls such as run() returning zero(). Keep calls with arguments working. Run the tests.",
+    "test_command": ["{python}", "-m", "unittest", "-v", "test_issue"],
+    "check_command": ["{python}", "{tasks_dir}/checks/acceptance.py", "youtube-dl-4-zero-arg-call"],
+    "source": {
+      "project": "ytdl-org/youtube-dl",
+      "dataset": "BugsInPy youtube-dl bug 4",
+      "buggy_commit": "bc40b3a5ba44006c23daf7fe0ed872af5e33bdc5",
+      "fixed_commit": "189935f15960300d316e8b07108b076ac6c2186a"
+    }
+  },
+  {
+    "id": "youtube-dl-5-pm-timestamp",
+    "repo": "youtube_dl_5/repo",
+    "issue": "unified_timestamp must correctly parse AM/PM dates handled by the email-date fallback. May 16, 2016 11:15 PM should resolve to 23:15 UTC, and the AM form to 11:15 UTC. Run the tests.",
+    "test_command": ["{python}", "-m", "unittest", "-v", "test_issue"],
+    "check_command": ["{python}", "{tasks_dir}/checks/acceptance.py", "youtube-dl-5-pm-timestamp"],
+    "source": {
+      "project": "ytdl-org/youtube-dl",
+      "dataset": "BugsInPy youtube-dl bug 5",
+      "buggy_commit": "b02b960c6bba834d9e7199ac53430c7933079dc8",
+      "fixed_commit": "7dc2a74e0ac9cfa74cc9de6f586ffd5cc8bac0d9"
+    }
+  },
+  {
+    "id": "youtube-dl-6-dfxp-timing",
+    "repo": "youtube_dl_6/repo",
+    "issue": "DFXP subtitle conversion must skip paragraphs with missing begin time or without an end time or duration, while preserving valid timed paragraphs. parse_dfxp_time_expr(None) should return None. Run the tests.",
+    "test_command": ["{python}", "-m", "unittest", "-v", "test_issue"],
+    "check_command": ["{python}", "{tasks_dir}/checks/acceptance.py", "youtube-dl-6-dfxp-timing"],
+    "source": {
+      "project": "ytdl-org/youtube-dl",
+      "dataset": "BugsInPy youtube-dl bug 6",
+      "buggy_commit": "4f29fa99069760dc47ef9ca5dbf607a567d2982f",
+      "fixed_commit": "d631d5f9f27f93767226192e4288990413fa9dbd"
+    }
+  },
+  {
+    "id": "youtube-dl-7-escaped-apostrophe",
+    "repo": "youtube_dl_7/repo",
+    "issue": "js_to_json must turn a JavaScript double-quoted string containing escaped apostrophes into valid JSON with the apostrophes preserved. Calls without escaped apostrophes should keep working. Run the tests.",
+    "test_command": ["{python}", "-m", "unittest", "-v", "test_issue"],
+    "check_command": ["{python}", "{tasks_dir}/checks/acceptance.py", "youtube-dl-7-escaped-apostrophe"],
+    "source": {
+      "project": "ytdl-org/youtube-dl",
+      "dataset": "BugsInPy youtube-dl bug 7",
+      "buggy_commit": "63a64948342ebfe46db8c258765e698a04a61904",
+      "fixed_commit": "d01949dc89feb2441f251e42e8a6bfa4711b9715"
+    }
+  }
+]
