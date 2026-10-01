@@ -219,5 +219,44 @@
       "buggy_commit": "bc40b3a5ba44006c23daf7fe0ed872af5e33bdc5",
       "fixed_commit": "189935f15960300d316e8b07108b076ac6c2186a"
     }
+  },
+  {
+    "id": "youtube-dl-5-pm-timestamp",
+    "repo": "youtube_dl_5/repo",
+    "issue": "unified_timestamp must correctly parse AM/PM dates handled by the email-date fallback. May 16, 2016 11:15 PM should resolve to 23:15 UTC, and the AM form to 11:15 UTC. Run the tests.",
+    "test_command": ["{python}", "-m", "unittest", "-v", "test_issue"],
+    "check_command": ["{python}", "{tasks_dir}/checks/acceptance.py", "youtube-dl-5-pm-timestamp"],
+    "source": {
+      "project": "ytdl-org/youtube-dl",
+      "dataset": "BugsInPy youtube-dl bug 5",
+      "buggy_commit": "b02b960c6bba834d9e7199ac53430c7933079dc8",
+      "fixed_commit": "7dc2a74e0ac9cfa74cc9de6f586ffd5cc8bac0d9"
+    }
+  },
+  {
+    "id": "youtube-dl-6-dfxp-timing",
+    "repo": "youtube_dl_6/repo",
+    "issue": "DFXP subtitle conversion must skip paragraphs with missing begin time or without an end time or duration, while preserving valid timed paragraphs. parse_dfxp_time_expr(None) should return None. Run the tests.",
+    "test_command": ["{python}", "-m", "unittest", "-v", "test_issue"],
+    "check_command": ["{python}", "{tasks_dir}/checks/acceptance.py", "youtube-dl-6-dfxp-timing"],
+    "source": {
+      "project": "ytdl-org/youtube-dl",
+      "dataset": "BugsInPy youtube-dl bug 6",
+      "buggy_commit": "4f29fa99069760dc47ef9ca5dbf607a567d2982f",
+      "fixed_commit": "d631d5f9f27f93767226192e4288990413fa9dbd"
+    }
+  },
+  {
+    "id": "youtube-dl-7-escaped-apostrophe",
+    "repo": "youtube_dl_7/repo",
+    "issue": "js_to_json must turn a JavaScript double-quoted string containing escaped apostrophes into valid JSON with the apostrophes preserved. Calls without escaped apostrophes should keep working. Run the tests.",
+    "test_command": ["{python}", "-m", "unittest", "-v", "test_issue"],
+    "check_command": ["{python}", "{tasks_dir}/checks/acceptance.py", "youtube-dl-7-escaped-apostrophe"],
+    "source": {
+      "project": "ytdl-org/youtube-dl",
+      "dataset": "BugsInPy youtube-dl bug 7",
+      "buggy_commit": "63a64948342ebfe46db8c258765e698a04a61904",
+      "fixed_commit": "d01949dc89feb2441f251e42e8a6bfa4711b9715"
+    }
   }
 ]

@@ -1,6 +1,6 @@
-# 真实历史缺陷任务（17 条）
+# 真实历史缺陷任务（20 条）
 
-这 17 条任务来自 BugsInPy 中 tqdm、PySnooper、Tornado 和 youtube-dl 的历史缺陷记录，源码来自对应上游仓库。任务描述和验收测试由本项目编写，**不是**原始 GitHub Issue 文本。每题固定在一个上游 buggy commit，保留运行所需的 Python 源码和该版本的许可证文件；上游原测试及其他非运行文件没有复制进任务仓库。
+这 20 条任务来自 BugsInPy 中 tqdm、PySnooper、Tornado 和 youtube-dl 的历史缺陷记录，源码来自对应上游仓库。任务描述和验收测试由本项目编写，**不是**原始 GitHub Issue 文本。每题固定在一个上游 buggy commit，保留运行所需的 Python 源码和该版本的许可证文件；上游原测试及其他非运行文件没有复制进任务仓库。
 
 筛选时使用的 BugsInPy 元数据提交：[`11c5f1e`](https://github.com/soarsmu/BugsInPy/commit/11c5f1eea954a42132cfd06bf257766a7963e0fd)。每条任务的完整提交 SHA 也写在 [`tasks.json`](tasks.json) 中。
 
@@ -23,10 +23,13 @@
 | `youtube-dl-1-boolean-filter` | bug 1 | [`99036a1`](https://github.com/ytdl-org/youtube-dl/commit/99036a1298089068dcf80c0985bfcc3f8c24f281) | [`1cc47c6`](https://github.com/ytdl-org/youtube-dl/commit/1cc47c667419e0eadc0a6989256ab7b276852adf) | 布尔值 `False` 被一元筛选器误判为存在 |
 | `youtube-dl-3-html-unescape` | bug 3 | [`f5469da`](https://github.com/ytdl-org/youtube-dl/commit/f5469da9e6e259c1690c7ef54f1da1c19f65036f) | [`95f3f7c`](https://github.com/ytdl-org/youtube-dl/commit/95f3f7c20a05e7ac490e768b8470b20538ef8581) | 未知 `&` 序列阻止后续 HTML 实体解码 |
 | `youtube-dl-4-zero-arg-call` | bug 4 | [`bc40b3a`](https://github.com/ytdl-org/youtube-dl/commit/bc40b3a5ba44006c23daf7fe0ed872af5e33bdc5) | [`189935f`](https://github.com/ytdl-org/youtube-dl/commit/189935f15960300d316e8b07108b076ac6c2186a) | JavaScript 解释器不支持零参数函数调用 |
+| `youtube-dl-5-pm-timestamp` | bug 5 | [`b02b960`](https://github.com/ytdl-org/youtube-dl/commit/b02b960c6bba834d9e7199ac53430c7933079dc8) | [`7dc2a74`](https://github.com/ytdl-org/youtube-dl/commit/7dc2a74e0ac9cfa74cc9de6f586ffd5cc8bac0d9) | AM/PM 日期回退解析抛出异常 |
+| `youtube-dl-6-dfxp-timing` | bug 6 | [`4f29fa9`](https://github.com/ytdl-org/youtube-dl/commit/4f29fa99069760dc47ef9ca5dbf607a567d2982f) | [`d631d5f`](https://github.com/ytdl-org/youtube-dl/commit/d631d5f9f27f93767226192e4288990413fa9dbd) | 缺少时间字段的 DFXP 字幕行使转换中断 |
+| `youtube-dl-7-escaped-apostrophe` | bug 7 | [`63a6494`](https://github.com/ytdl-org/youtube-dl/commit/63a64948342ebfe46db8c258765e698a04a61904) | [`d01949d`](https://github.com/ytdl-org/youtube-dl/commit/d01949dc89feb2441f251e42e8a6bfa4711b9715) | JavaScript 字符串中转义的撇号产生无效 JSON |
 
-本批对 BugsInPy 的 tqdm bug 1–9 全部筛选并纳入，也纳入 PySnooper bug 1–2、Tornado bug 5、9、14 和 youtube-dl bug 1、3、4。PySnooper bug 3 的旧版源码依赖 `future` 包，在当前无额外依赖的 Python 3.12 环境无法导入，因此未纳入。PySnooper bug 1–2 的公开测试和独立验收在导入源码前，为 Python 3.12 补回旧版所需的 `collections.Mapping` 和 `collections.Sequence` 别名；Tornado bug 9 同样补回 `collections.MutableMapping`。这些仅是测试环境适配，任务源码保持上游原样，断言仍针对历史缺陷行为。
+本批对 BugsInPy 的 tqdm bug 1–9 全部筛选并纳入，也纳入 PySnooper bug 1–2、Tornado bug 5、9、14 和 youtube-dl bug 1、3–7。PySnooper bug 3 的旧版源码依赖 `future` 包，在当前无额外依赖的 Python 3.12 环境无法导入，因此未纳入。PySnooper bug 1–2 的公开测试和独立验收在导入源码前，为 Python 3.12 补回旧版所需的 `collections.Mapping` 和 `collections.Sequence` 别名；Tornado bug 9 同样补回 `collections.MutableMapping`。这些仅是测试环境适配，任务源码保持上游原样，断言仍针对历史缺陷行为。
 
-youtube-dl 任务仅保留原样的 `utils.py`、`compat.py`、`socks.py` 和 `jsinterp.py`。省去会加载完整下载器及站点提取器的包入口后，Python 将该目录作为命名空间包导入；任务只验证本地工具函数，不下载视频。筛选时也检查了 thefuck 的候选规则，但旧版直接导入需要 `decorator`、`psutil` 等额外依赖，因此未纳入当前标准库任务集。
+youtube-dl 任务只保留对应历史版本运行目标函数所需的原样源码，包含 `utils.py`、`compat.py`，部分版本还包含 `socks.py` 或 `jsinterp.py`。省去会加载完整下载器及站点提取器的包入口后，Python 将该目录作为命名空间包导入；任务只验证本地工具函数，不下载视频。筛选时也检查了 thefuck 的候选规则，但旧版直接导入需要 `decorator`、`psutil` 等额外依赖，因此未纳入当前标准库任务集。
 
 ## 离线复现
 
@@ -37,7 +40,7 @@ python -m issue_agent.cli check --tasks real_tasks/tasks.json
 python -m issue_agent.cli verify --tasks real_tasks/tasks.json --fixes real_tasks/checks/reference_fixes.json
 ```
 
-`check` 确认每题的公开测试和独立验收在旧版源码上失败。`verify` 在临时副本中应用参考修复，再确认两组测试通过，不会改动题目源码。独立验收和参考修复都在任务仓库之外，Agent 的文件工具读不到它们。我们还在对应上游 fixed commit 上运行了相同的测试，17 题均通过。
+`check` 确认每题的公开测试和独立验收在旧版源码上失败。`verify` 在临时副本中应用参考修复，再确认两组测试通过，不会改动题目源码。独立验收和参考修复都在任务仓库之外，Agent 的文件工具读不到它们。我们还在对应上游 fixed commit 上运行了相同的测试，20 题均通过。
 
 上述复现使用 Python 3.12.14；更换解释器版本时请重新运行两条离线验证命令。
 

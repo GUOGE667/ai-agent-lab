@@ -5,6 +5,7 @@ from __future__ import annotations
 import io
 import collections
 import collections.abc
+import datetime
 import sys
 import tempfile
 import unittest
@@ -208,6 +209,36 @@ class ZeroArgumentFunctionAcceptance(unittest.TestCase):
         self.assertEqual(JSInterpreter(source).call_function("outer"), 3)
 
 
+class UnifiedTimestampAcceptance(unittest.TestCase):
+    def test_am_and_pm_use_correct_utc_hour(self):
+        from youtube_dl.utils import unified_timestamp
+
+        morning = int(datetime.datetime(2016, 5, 16, 11, 15, tzinfo=datetime.timezone.utc).timestamp())
+        evening = int(datetime.datetime(2016, 5, 16, 23, 15, tzinfo=datetime.timezone.utc).timestamp())
+        self.assertEqual(unified_timestamp("May 16, 2016 11:15 AM"), morning)
+        self.assertEqual(unified_timestamp("May 16, 2016 11:15 PM"), evening)
+
+
+class DfxpTimingAcceptance(unittest.TestCase):
+    def test_paragraph_without_duration_or_end_is_skipped(self):
+        from youtube_dl.utils import dfxp2srt
+
+        source = ('<tt><body><div><p begin="0">no duration</p>'
+                  '<p begin="1" dur="1">valid</p></div></body></tt>')
+        output = dfxp2srt(source)
+        self.assertIn("valid", output)
+        self.assertNotIn("no duration", output)
+
+
+class JavascriptStringAcceptance(unittest.TestCase):
+    def test_multiple_escaped_apostrophes_form_valid_json(self):
+        import json
+        from youtube_dl.utils import js_to_json
+
+        source = '"The CW\\\'s \\\'Crazy Ex-Girlfriend\\\'"'
+        self.assertEqual(json.loads(js_to_json(source)), "The CW's 'Crazy Ex-Girlfriend'")
+
+
 CASES = {
     "tqdm-1-enumerate-start": EnumerateStartAcceptance,
     "tqdm-2-ansi-trim": AnsiTrimAcceptance,
@@ -226,6 +257,9 @@ CASES = {
     "youtube-dl-1-boolean-filter": BooleanFilterAcceptance,
     "youtube-dl-3-html-unescape": HtmlUnescapeAcceptance,
     "youtube-dl-4-zero-arg-call": ZeroArgumentFunctionAcceptance,
+    "youtube-dl-5-pm-timestamp": UnifiedTimestampAcceptance,
+    "youtube-dl-6-dfxp-timing": DfxpTimingAcceptance,
+    "youtube-dl-7-escaped-apostrophe": JavascriptStringAcceptance,
 }
 
 

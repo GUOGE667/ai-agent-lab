@@ -93,5 +93,17 @@
   "youtube-dl-4-zero-arg-call": [
     {"path": "youtube_dl/jsinterp.py", "old": "(?P<args>[a-zA-Z0-9_$,]+)", "new": "(?P<args>[a-zA-Z0-9_$,]*)"},
     {"path": "youtube_dl/jsinterp.py", "old": "for v in m.group('args').split(',')])", "new": "for v in m.group('args').split(',')]) if len(m.group('args')) > 0 else tuple()"}
+  ],
+  "youtube-dl-5-pm-timestamp": [
+    {"path": "youtube_dl/utils.py", "old": "pm_delta = datetime.timedelta(hours=12 if re.search(r'(?i)PM', date_str) else 0)", "new": "pm_delta = 12 if re.search(r'(?i)PM', date_str) else 0"},
+    {"path": "youtube_dl/utils.py", "old": "dt = datetime.datetime.strptime(date_str, expression) - timezone + pm_delta", "new": "dt = datetime.datetime.strptime(date_str, expression) - timezone + datetime.timedelta(hours=pm_delta)"},
+    {"path": "youtube_dl/utils.py", "old": "return calendar.timegm(timetuple.timetuple())", "new": "return calendar.timegm(timetuple) + pm_delta * 3600"}
+  ],
+  "youtube-dl-6-dfxp-timing": [
+    {"path": "youtube_dl/utils.py", "old": "if not time_expr:\n        return 0.0", "new": "if not time_expr:\n        return None"},
+    {"path": "youtube_dl/utils.py", "old": "        begin_time = parse_dfxp_time_expr(para.attrib['begin'])\n        end_time = parse_dfxp_time_expr(para.attrib.get('end'))\n        if not end_time:\n            end_time = begin_time + parse_dfxp_time_expr(para.attrib['dur'])", "new": "        begin_time = parse_dfxp_time_expr(para.attrib.get('begin'))\n        end_time = parse_dfxp_time_expr(para.attrib.get('end'))\n        dur = parse_dfxp_time_expr(para.attrib.get('dur'))\n        if begin_time is None:\n            continue\n        if not end_time:\n            if not dur:\n                continue\n            end_time = begin_time + dur"}
+  ],
+  "youtube-dl-7-escaped-apostrophe": [
+    {"path": "youtube_dl/utils.py", "old": "        if v.startswith('\"'):\n            return v\n        if v.startswith(\"'\"):", "new": "        if v.startswith('\"'):\n            v = re.sub(r\"\\\\'\", \"'\", v[1:-1])\n        elif v.startswith(\"'\"):"}
   ]
 }
